@@ -147,10 +147,6 @@ h1 {
     text-align: center;
     margin-bottom: 15px;
     color: #ff4e7d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
 }
 
 .outfits-grid {
@@ -224,9 +220,6 @@ h1 {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
 .category-btn:hover {
@@ -417,9 +410,6 @@ h1 {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
 .action-btn:hover {
