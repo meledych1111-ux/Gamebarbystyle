@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Барби: Стиль и Гламур</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>Барби: Стиль и Гламур</h1>
+            <div class="glitter" id="glitter"></div>
+        </div>
+        
+        <div class="game-content">
+            <div class="doll-container">
+                <div class="doll" id="doll">
+                    <!-- Одежда будет добавляться динамически -->
+                </div>
+            </div>
+            
+            <div class="wardrobe">
+                <div class="category-buttons">
+                    <button class="category-btn active" data-category="dresses">Платья</button>
+                    <button class="category-btn" data-category="tops">Верх</button>
+                    <button class="category-btn" data-category="bottoms">Низ</button>
+                    <button class="category-btn" data-category="shoes">Обувь</button>
+                    <button class="category-btn" data-category="accessories">Аксессуары</button>
+                </div>
+                
+                <div class="color-picker-container">
+                    <h3>Выбор цвета:</h3>
+                    <input type="color" id="color-picker" value="#ff9dc9">
+                    <div class="preset-colors">
+                        <div class="color-preset" style="background: #ff9dc9;" data-color="#ff9dc9"></div>
+                        <div class="color-preset" style="background: #a2d2ff;" data-color="#a2d2ff"></div>
+                        <div class="color-preset" style="background: #ffd166;" data-color="#ffd166"></div>
+                        <div class="color-preset" style="background: #cdb4db;" data-color="#cdb4db"></div>
+                        <div class="color-preset" style="background: #ffc8dd;" data-color="#ffc8dd"></div>
+                    </div>
+                </div>
+                
+                <div class="items-grid" id="items-grid">
+                    <!-- Элементы одежды будут добавляться динамически -->
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn save">Сохранить образ</button>
+                    <button class="action-btn reset">Сбросить всё</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Создай свой уникальный стиль для Барби! 💖
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
