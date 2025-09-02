@@ -9,19 +9,19 @@ document.addEventListener('DOMContentLoaded', function() {
     let savedOutfits = [];
     let outfitCounter = 1;
     
-    // Данные об элементах с реалистичными изображениями
+    // Данные об элементах с использованием ассетов из открытых библиотек
     const itemsData = {
         hair: [
-            { id: 'hair1', name: 'Длинные прямые', image: 'https://i.ibb.co/0Qq3y0C/long-straight-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair2', name: 'Волнистые', image: 'https://i.ibb.co/0Qq3y0C/wavy-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair3', name: 'Кудрявые', image: 'https://i.ibb.co/0Qq3y0C/curly-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair4', name: 'Хвост', image: 'https://i.ibb.co/0Qq3y0C/ponytail-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair5', name: 'Пучок', image: 'https://i.ibb.co/0Qq3y0C/bun-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair6', name: 'Косички', image: 'https://i.ibb.co/0Qq3y0C/braids-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair7', name: 'Каре', image: 'https://i.ibb.co/0Qq3y0C/bob-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair8', name: 'Асимметрия', image: 'https://i.ibb.co/0Qq3y0C/asymmetric-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair9', name: 'С челкой', image: 'https://i.ibb.co/0Qq3y0C/bangs-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
-            { id: 'hair10', name: 'Прическа с цветами', image: 'https://i.ibb.co/0Qq3y0C/flower-hair.png', position: { top: '0', left: '0', width: '100%', height: '100%' } }
+            { id: 'hair1', name: 'Длинные прямые', image: 'https://i.ibb.co/0Qq3y0C/long-straight-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair2', name: 'Волнистые', image: 'https://i.ibb.co/0Qq3y0C/wavy-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair3', name: 'Кудрявые', image: 'https://i.ibb.co/0Qq3y0C/curly-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair4', name: 'Хвост', image: 'https://i.ibb.co/0Qq3y0C/ponytail-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair5', name: 'Пучок', image: 'https://i.ibb.co/0Qq3y0C/bun-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair6', name: 'Косички', image: 'https://i.ibb.co/0Qq3y0C/braids-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair7', name: 'Каре', image: 'https://i.ibb.co/0Qq3y0C/bob-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair8', name: 'Асимметрия', image: 'https://i.ibb.co/0Qq3y0C/asymmetric-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair9', name: 'С челкой', image: 'https://i.ibb.co/0Qq3y0C/bangs-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } },
+            { id: 'hair10', name: 'Прическа с цветами', image: 'https://i.ibb.co/0Qq3y0C/flower-hair.png', position: { top: '0', left: '0', width: '100%', height: '40%' } }
         ],
         makeup: [
             { id: 'makeup1', name: 'Дневной макияж', image: 'https://i.ibb.co/0Qq3y0C/day-makeup.png', position: { top: '0', left: '0', width: '100%', height: '100%' } },
