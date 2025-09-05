@@ -1,104 +1,45 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Барби: Стиль и Гламур</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Barbie Dress-Up Game</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="game-container">
-        <div class="header">
-            <h1>Барби: Стиль и Гламур</h1>
-            <div class="glitter" id="glitter"></div>
-        </div>
-        
-        <div class="game-content">
-            <div class="doll-section">
-                <div class="doll-container">
-                    <div class="doll-base">
-                        <img src="https://i.ibb.co/3zQq0Z0/barbie-base.png" alt="Барби" class="barbie-base" id="barbie-base">
-                        <div class="doll" id="doll">
-                            <!-- Одежда, прически и макияж будут добавляться динамически -->
-                        </div>
-                    </div>
+        <div class="doll-container">
+            <canvas id="barbie-canvas" width="300" height="500"></canvas>
+            <div id="color-picker" class="color-picker hidden">
+                <h3>Select Color</h3>
+                <input type="color" id="color-input" value="#ff69b4">
+                <div class="color-presets">
+                    <div class="color-option" style="background-color: #ff69b4;" data-color="#ff69b4"></div>
+                    <div class="color-option" style="background-color: #ff1493;" data-color="#ff1493"></div>
+                    <div class="color-option" style="background-color: #00bfff;" data-color="#00bfff"></div>
+                    <div class="color-option" style="background-color: #32cd32;" data-color="#32cd32"></div>
+                    <div class="color-option" style="background-color: #ffd700;" data-color="#ffd700"></div>
                 </div>
-                
-                <div class="saved-outfits">
-                    <h3>💾 Сохраненные образы</h3>
-                    <div class="outfits-grid" id="outfits-grid">
-                        <div class="no-outfits">Пока нет сохраненных образов</div>
-                        <!-- Сохраненные образы будут добавляться сюда -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="wardrobe-section">
-                <div class="category-buttons">
-                    <button class="category-btn active" data-category="hair">💇 Прически</button>
-                    <button class="category-btn" data-category="makeup">💄 Макияж</button>
-                    <button class="category-btn" data-category="dresses">👗 Платья</button>
-                    <button class="category-btn" data-category="tops">👚 Верх</button>
-                    <button class="category-btn" data-category="bottoms">👖 Низ</button>
-                    <button class="category-btn" data-category="shoes">👠 Обувь</button>
-                    <button class="category-btn" data-category="accessories">💍 Аксессуары</button>
-                </div>
-                
-                <div class="controls-container">
-                    <div class="color-controls">
-                        <div class="control-group">
-                            <h3>🎨 Цвет:</h3>
-                            <input type="color" id="color-picker" value="#ff9dc9">
-                            <div class="preset-colors">
-                                <div class="color-preset" style="background: #ff9dc9;" data-color="#ff9dc9"></div>
-                                <div class="color-preset" style="background: #a2d2ff;" data-color="#a2d2ff"></div>
-                                <div class="color-preset" style="background: #ffd166;" data-color="#ffd166"></div>
-                                <div class="color-preset" style="background: #cdb4db;" data-color="#cdb4db"></div>
-                                <div class="color-preset" style="background: #ffc8dd;" data-color="#ffc8dd"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="texture-controls">
-                        <div class="control-group">
-                            <h3>🧵 Текстуры:</h3>
-                            <div class="texture-presets">
-                                <div class="texture-preset denim" data-texture="denim" title="Джинсовая ткань"></div>
-                                <div class="texture-preset leather" data-texture="leather" title="Кожа"></div>
-                                <div class="texture-preset lace" data-texture="lace" title="Кружево"></div>
-                                <div class="texture-preset silk" data-texture="silk" title="Шелк"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="glitter-controls">
-                        <div class="control-group">
-                            <h3>✨ Эффекты:</h3>
-                            <div class="glitter-presets">
-                                <div class="glitter-preset" data-glitter="light" title="Легкий блеск"></div>
-                                <div class="glitter-preset" data-glitter="medium" title="Средний блеск"></div>
-                                <div class="glitter-preset" data-glitter="heavy" title="Сильный блеск"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="items-grid" id="items-grid">
-                    <!-- Элементы будут добавляться динамически -->
-                </div>
-                
-                <div class="actions">
-                    <button class="action-btn save" id="save-outfit">💾 Сохранить образ</button>
-                    <button class="action-btn reset" id="reset-all">🗑️ Сбросить всё</button>
-                </div>
+                <button id="apply-color">Apply</button>
+                <button id="cancel-color">Cancel</button>
             </div>
         </div>
-        
-        <div class="footer">
-            Создай свой уникальный стиль для Барби! 💖
+        <div class="wardrobe-panel">
+            <h2>Wardrobe</h2>
+            <button id="change-doll">Change Doll</button>
+            <div id="wardrobe-categories" class="categories-scroll"></div>
+            <div id="wardrobe-items" class="items-scroll"></div>
+            <div class="controls">
+                <button id="save-outfit">Save Outfit</button>
+                <button id="load-outfit">Load Outfit</button>
+                <button id="reset-outfit">Reset</button>
+            </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
+    <script src="js/asset-loader.js"></script>
+    <script src="js/color-picker.js"></script>
+    <script src="js/canvas-renderer.js"></script>
+    <script src="js/wardrobe-manager.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>
