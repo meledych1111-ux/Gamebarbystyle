@@ -1,83 +1,79 @@
 class WardrobeManager {
     constructor() {
-        this.currentOutfit = {};
-        this.wardrobe = {};
-        this.canvasRenderer = new CanvasRenderer();
-        this.colorPicker = new ColorPicker();
-        this.currentDoll = 'assets/dolls/barbie-base.png';
-        this.dolls = ['assets/dolls/barbie-base.png', 'assets/dolls/barbie-skin2.png'];
+        this.currentCategory = 'dresses';
     }
 
-    async init() {
-        this.wardrobe = await AssetLoader.loadWardrobeConfig();
-        await this.preloadClothes();
-        this.canvasRenderer.setDoll(this.currentDoll);
-        this.canvasRenderer.setupTouchEvents();
-        this.renderCategories();
+    init() {
+        this.loadWardrobe();
+        this.showCategory(this.currentCategory);
     }
 
-    // ... остальные методы без изменений до equipItem ...
-
-    equipItem(category, item) {
-        // Если предмет уже надет, показываем пикер цвета
-        if (this.currentOutfit[category]) {
-            const currentColor = this.currentOutfit[category].color || null;
-            this.colorPicker.show(category, currentColor, (cat, color) => {
-                this.updateItemColor(cat, color);
+    loadWardrobe() {
+        const wardrobeConfig = assetLoader.getWardrobeConfig();
+        const clothesGrid = document.getElementById('clothesGrid');
+        
+        // Очищаем сетку
+        clothesGrid.innerHTML = '';
+        
+        // Загружаем одежду для всех категорий
+        Object.entries(wardrobeConfig.categories).forEach(([category, items]) => {
+            items.forEach(item => {
+                const clothing = assetLoader.getClothing(item.id, category);
+                if (clothing) {
+                    this.createClothingItem(clothing, category);
+                }
             });
-            return;
-        }
+        });
+    }
+
+    createClothingItem(clothing, category) {
+        const clothesGrid = document.getElementById('clothesGrid');
         
-        // Добавляем новый предмет
-        item.category = category; // Добавляем категорию для идентификации
-        const layer = this.canvasRenderer.addLayer(item);
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'clothing-item';
+        itemDiv.dataset.itemId = clothing.id;
+        itemDiv.dataset.category = category;
+        itemDiv.style.display = 'none'; // Сначала скрываем
         
-        this.currentOutfit[category] = {
-            item: item,
-            color: null,
-            layer: layer
+        const img = document.createElement('img');
+        img.src = clothing.thumbnail || clothing.image;
+        img.alt = clothing.name;
+        img.onerror = () => {
+            img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRkY2OUI0IiBmaWxsLW9wYWNpdHk9IjAuMyIgcng9IjgiLz4KPHN2ZyB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5orgL0yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xMSAxNUgxM00yMSAxMlYxNUwzIDE1VjEyQzMgNy4wMjkgNy4wMjkgMyAxMiAzQzE2Ljk3MSAzIDIxIDcuMDI5IDIxIDEyWiIgc3Ryb2tlPSIjRkY2OUI0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4KPC9zdmc+';
         };
+
+        const name = document.createElement('p');
+        name.textContent = clothing.name;
+
+        itemDiv.appendChild(img);
+        itemDiv.appendChild(name);
+        clothesGrid.appendChild(itemDiv);
     }
 
-    updateItemColor(category, color) {
-        if (this.currentOutfit[category]) {
-            this.currentOutfit[category].color = color;
-            this.canvasRenderer.updateLayerColor(category, color);
-        }
+    showCategory(category) {
+        this.currentCategory = category;
+        
+        // Скрываем все элементы одежды
+        document.querySelectorAll('.clothing-item').forEach(item => {
+            item.style.display = 'none';
+        });
+        
+        // Показываем только выбранную категорию
+        document.querySelectorAll(`.clothing-item[data-category="${category}"]`).forEach(item => {
+            item.style.display = 'block';
+        });
+        
+        // Обновляем активную кнопку
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`.tab-button[data-category="${category}"]`).classList.add('active');
     }
 
-    changeDoll() {
-        const currentIndex = this.dolls.indexOf(this.currentDoll);
-        this.currentDoll = this.dolls[(currentIndex + 1) % this.dolls.length];
-        this.canvasRenderer.setDoll(this.currentDoll);
-    }
-
-    saveOutfit() {
-        const outfitData = this.canvasRenderer.getOutfitData();
-        localStorage.setItem('savedOutfit', JSON.stringify(outfitData));
-        alert('Outfit saved!');
-    }
-
-    loadOutfit() {
-        const outfitData = localStorage.getItem('savedOutfit');
-        if (outfitData) {
-            this.canvasRenderer.loadOutfitData(JSON.parse(outfitData));
-            
-            // Обновляем currentOutfit
-            this.currentOutfit = {};
-            const data = JSON.parse(outfitData);
-            data.layers.forEach(layer => {
-                this.currentOutfit[layer.item.category] = {
-                    item: layer.item,
-                    color: layer.color
-                };
-            });
-        }
-    }
-
-    resetOutfit() {
-        this.currentOutfit = {};
-        this.canvasRenderer.layers = [];
-        this.canvasRenderer.render();
+    getCurrentCategory() {
+        return this.currentCategory;
     }
 }
+
+// Создаем экземпляр менеджера гардероба
+const wardrobeManager = new WardrobeManager();
