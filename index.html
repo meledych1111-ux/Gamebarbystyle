@@ -1,45 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Barbie Dress-Up Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbie Dress Up Game</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="game-container">
-        <div class="doll-container">
-            <canvas id="barbie-canvas" width="300" height="500"></canvas>
-            <div id="color-picker" class="color-picker hidden">
-                <h3>Select Color</h3>
-                <input type="color" id="color-input" value="#ff69b4">
-                <div class="color-presets">
-                    <div class="color-option" style="background-color: #ff69b4;" data-color="#ff69b4"></div>
-                    <div class="color-option" style="background-color: #ff1493;" data-color="#ff1493"></div>
-                    <div class="color-option" style="background-color: #00bfff;" data-color="#00bfff"></div>
-                    <div class="color-option" style="background-color: #32cd32;" data-color="#32cd32"></div>
-                    <div class="color-option" style="background-color: #ffd700;" data-color="#ffd700"></div>
+        <header class="game-header">
+            <h1>Barbie Dress Up</h1>
+        </header>
+
+        <main class="game-main">
+            <div class="doll-section">
+                <canvas id="dollCanvas" width="300" height="500"></canvas>
+                <div class="color-picker-container">
+                    <h3>Цвет волос</h3>
+                    <input type="color" id="hairColor" value="#ffd700">
+                    <h3>Цвет глаз</h3>
+                    <input type="color" id="eyesColor" value="#00aaff">
                 </div>
-                <button id="apply-color">Apply</button>
-                <button id="cancel-color">Cancel</button>
             </div>
-        </div>
-        <div class="wardrobe-panel">
-            <h2>Wardrobe</h2>
-            <button id="change-doll">Change Doll</button>
-            <div id="wardrobe-categories" class="categories-scroll"></div>
-            <div id="wardrobe-items" class="items-scroll"></div>
-            <div class="controls">
-                <button id="save-outfit">Save Outfit</button>
-                <button id="load-outfit">Load Outfit</button>
-                <button id="reset-outfit">Reset</button>
+
+            <div class="wardrobe-section">
+                <div class="category-tabs">
+                    <button class="tab-button active" data-category="dresses">Платья</button>
+                    <button class="tab-button" data-category="tops">Верх</button>
+                    <button class="tab-button" data-category="pants">Низ</button>
+                    <button class="tab-button" data-category="shoes">Обувь</button>
+                    <button class="tab-button" data-category="accessories">Аксессуары</button>
+                </div>
+
+                <div class="clothes-grid" id="clothesGrid">
+                    <!-- Одежда будет загружена через JavaScript -->
+                </div>
             </div>
+        </main>
+
+        <div class="controls">
+            <button id="resetBtn">Сбросить</button>
+            <button id="saveBtn">Сохранить</button>
         </div>
     </div>
+
     <script src="js/asset-loader.js"></script>
-    <script src="js/color-picker.js"></script>
-    <script src="js/canvas-renderer.js"></script>
     <script src="js/wardrobe-manager.js"></script>
+    <script src="js/canvas-renderer.js"></script>
+    <script src="js/color-picker.js"></script>
     <script src="js/game.js"></script>
 </body>
 </html>
