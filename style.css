@@ -1,104 +1,209 @@
-/* Добавьте в style.css */
-
-/* Мобильная адаптация */
-@media (max-width: 768px) {
-    .game-container {
-        flex-direction: column;
-        padding: 10px;
-        max-height: 100vh;
-        overflow: hidden;
-    }
-    
-    .doll-container, .wardrobe-panel {
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    .doll-container {
-        height: 50vh;
-    }
-    
-    #barbie-canvas {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-    
-    .categories-scroll, .items-scroll {
-        overflow-x: auto;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    #wardrobe-categories {
-        flex-wrap: nowrap;
-    }
-    
-    .wardrobe-item {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .controls {
-        flex-wrap: wrap;
-    }
-    
-    .controls button {
-        flex: 1;
-        min-width: 80px;
-        margin: 2px;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Color Picker */
-.color-picker {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ffc0cb, #ff69b4);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.game-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.game-header h1 {
+    color: #e91e63;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.doll-section {
+    text-align: center;
+}
+
+#dollCanvas {
+    border: 3px solid #ff69b4;
+    border-radius: 15px;
     background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.color-picker-container {
+    margin-top: 20px;
     padding: 15px;
+    background: #f8f8f8;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    z-index: 100;
 }
 
-.color-picker.hidden {
-    display: none;
+.color-picker-container h3 {
+    margin-bottom: 8px;
+    color: #e91e63;
+    font-size: 1.1em;
 }
 
-.color-presets {
-    display: flex;
-    gap: 5px;
-    margin: 10px 0;
-}
-
-.color-option {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
+.color-picker-container input[type="color"] {
+    width: 60px;
+    height: 40px;
+    border: 2px solid #ff69b4;
+    border-radius: 8px;
     cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.wardrobe-section {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: #ff69b4;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    background: #e91e63;
+    transform: translateY(-2px);
+}
+
+.tab-button.active {
+    background: #e91e63;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.clothes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.clothing-item {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
     border: 2px solid transparent;
 }
 
-.color-option:hover {
-    border-color: #333;
+.clothing-item:hover {
+    transform: translateY(-5px);
+    border-color: #ff69b4;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-#color-input {
-    width: 100%;
-    height: 30px;
-    margin: 5px 0;
+.clothing-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
 }
 
-/* Для сенсорных устройств */
-@media (hover: none) {
-    .wardrobe-item:hover {
-        transform: none;
-        border-color: transparent;
+.clothing-item p {
+    font-size: 0.9em;
+    color: #333;
+    font-weight: 500;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.controls button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#resetBtn {
+    background: #ff4757;
+    color: white;
+}
+
+#resetBtn:hover {
+    background: #ff3742;
+    transform: translateY(-2px);
+}
+
+#saveBtn {
+    background: #2ed573;
+    color: white;
+}
+
+#saveBtn:hover {
+    background: #25c164;
+    transform: translateY(-2px);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .game-main {
+        grid-template-columns: 1fr;
     }
     
-    button:active {
-        transform: scale(0.95);
+    .game-header h1 {
+        font-size: 2em;
+    }
+    
+    .category-tabs {
+        justify-content: center;
+    }
+    
+    .clothes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .controls button {
+        width: 200px;
     }
 }
