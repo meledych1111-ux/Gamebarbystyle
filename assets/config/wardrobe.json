@@ -1,0 +1,135 @@
+{
+  "categories": {
+    "dresses": [
+      {
+        "id": "dress-pink",
+        "name": "Розовое платье",
+        "image": "assets/clothes/dresses/dress-pink.png",
+        "thumbnail": "assets/clothes/dresses/thumbnails/dress-pink-thumb.png",
+        "layer": "over"
+      },
+      {
+        "id": "dress-blue",
+        "name": "Голубое платье",
+        "image": "assets/clothes/dresses/dress-blue.png",
+        "thumbnail": "assets/clothes/dresses/thumbnails/dress-blue-thumb.png",
+        "layer": "over"
+      },
+      {
+        "id": "dress-party",
+        "name": "Вечернее платье",
+        "image": "assets/clothes/dresses/dress-party.png",
+        "thumbnail": "assets/clothes/dresses/thumbnails/dress-party-thumb.png",
+        "layer": "over"
+      }
+    ],
+    "tops": [
+      {
+        "id": "top-white",
+        "name": "Белая блузка",
+        "image": "assets/clothes/tops/top-white.png",
+        "thumbnail": "assets/clothes/tops/thumbnails/top-white-thumb.png",
+        "layer": "middle"
+      },
+      {
+        "id": "top-pink",
+        "name": "Розовый топ",
+        "image": "assets/clothes/tops/top-pink.png",
+        "thumbnail": "assets/clothes/tops/thumbnails/top-pink-thumb.png",
+        "layer": "middle"
+      },
+      {
+        "id": "top-striped",
+        "name": "Полосатая футболка",
+        "image": "assets/clothes/tops/top-striped.png",
+        "thumbnail": "assets/clothes/tops/thumbnails/top-striped-thumb.png",
+        "layer": "middle"
+      }
+    ],
+    "pants": [
+      {
+        "id": "pants-jeans",
+        "name": "Джинсы",
+        "image": "assets/clothes/pants/pants-jeans.png",
+        "thumbnail": "assets/clothes/pants/thumbnails/pants-jeans-thumb.png",
+        "layer": "under"
+      },
+      {
+        "id": "pants-pink",
+        "name": "Розовые брюки",
+        "image": "assets/clothes/pants/pants-pink.png",
+        "thumbnail": "assets/clothes/pants/thumbnails/pants-pink-thumb.png",
+        "layer": "under"
+      },
+      {
+        "id": "skirt-black",
+        "name": "Черная юбка",
+        "image": "assets/clothes/pants/skirt-black.png",
+        "thumbnail": "assets/clothes/pants/thumbnails/skirt-black-thumb.png",
+        "layer": "under"
+      }
+    ],
+    "shoes": [
+      {
+        "id": "shoes-heels",
+        "name": "Туфли на каблуке",
+        "image": "assets/clothes/shoes/shoes-heels.png",
+        "thumbnail": "assets/clothes/shoes/thumbnails/shoes-heels-thumb.png",
+        "layer": "shoes"
+      },
+      {
+        "id": "shoes-sneakers",
+        "name": "Кроссовки",
+        "image": "assets/clothes/shoes/shoes-sneakers.png",
+        "thumbnail": "assets/clothes/shoes/thumbnails/shoes-sneakers-thumb.png",
+        "layer": "shoes"
+      },
+      {
+        "id": "shoes-boots",
+        "name": "Сапоги",
+        "image": "assets/clothes/shoes/shoes-boots.png",
+        "thumbnail": "assets/clothes/shoes/thumbnails/shoes-boots-thumb.png",
+        "layer": "shoes"
+      }
+    ],
+    "accessories": [
+      {
+        "id": "necklace-gold",
+        "name": "Золотое ожерелье",
+        "image": "assets/clothes/accessories/necklace-gold.png",
+        "thumbnail": "assets/clothes/accessories/thumbnails/necklace-gold-thumb.png",
+        "layer": "accessories"
+      },
+      {
+        "id": "bag-pink",
+        "name": "Розовая сумочка",
+        "image": "assets/clothes/accessories/bag-pink.png",
+        "thumbnail": "assets/clothes/accessories/thumbnails/bag-pink-thumb.png",
+        "layer": "accessories"
+      },
+      {
+        "id": "hat-sun",
+        "name": "Соломенная шляпа",
+        "image": "assets/clothes/accessories/hat-sun.png",
+        "thumbnail": "assets/clothes/accessories/thumbnails/hat-sun-thumb.png",
+        "layer": "accessories"
+      }
+    ]
+  },
+  "dolls": [
+    {
+      "id": "barbie-base",
+      "name": "Барби",
+      "image": "assets/dolls/barbie-base.png",
+      "defaultHairColor": "#ffd700",
+      "defaultEyesColor": "#00aaff"
+    },
+    {
+      "id": "barbie-skin2",
+      "name": "Барби (2)",
+      "image": "assets/dolls/barbie-skin2.png",
+      "defaultHairColor": "#8b4513",
+      "defaultEyesColor": "#008b8b"
+    }
+  ]
+}
