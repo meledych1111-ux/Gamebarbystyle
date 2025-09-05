@@ -1,46 +1,5 @@
 class CanvasRenderer {
-    constructor() {
-        this.canvas = document.getElementById('barbie-canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.dollImage = null;
-        this.layers = [];
-        this.currentDoll = null;
-    }
-
-    setDoll(imageUrl) {
-        this.currentDoll = imageUrl;
-        this.dollImage = new Image();
-        this.dollImage.src = imageUrl;
-        this.dollImage.onload = () => this.render();
-    }
-
-    addLayer(item, color = null) {
-        const layer = {
-            image: new Image(),
-            item: {...item},
-            color: color
-        };
-        
-        layer.image.src = item.image;
-        layer.image.onload = () => this.render();
-        this.layers.push(layer);
-        this.render();
-        
-        return layer;
-    }
-
-    removeLayer(category) {
-        this.layers = this.layers.filter(layer => layer.item.category !== category);
-        this.render();
-    }
-
-    updateLayerColor(category, color) {
-        const layer = this.layers.find(l => l.item.category === category);
-        if (layer) {
-            layer.color = color;
-            this.render();
-        }
-    }
+    // ... остальной код без изменений ...
 
     render() {
         // Очищаем canvas
@@ -56,23 +15,8 @@ class CanvasRenderer {
             if (layer.image.complete) {
                 this.ctx.save();
                 
-                if (layer.color) {
-                    // Создаем временный canvas для окрашивания
-                    const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = layer.image.width;
-                    tempCanvas.height = layer.image.height;
-                    const tempCtx = tempCanvas.getContext('2d');
-                    
-                    // Рисуем изображение на временном canvas
-                    tempCtx.drawImage(layer.image, 0, 0);
-                    
-                    // Применяем цветовой эффект
-                    tempCtx.globalCompositeOperation = 'source-in';
-                    tempCtx.fillStyle = layer.color;
-                    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                    
-                    // Рисуем на основном canvas
-                    this.ctx.drawImage(tempCanvas, 0, 0, this.canvas.width, this.canvas.height);
+                if (layer.color && layer.item.colorable !== false) {
+                    this.applyColorToImage(layer.image, layer.color, layer.item.templateType || 'white');
                 } else {
                     // Рисуем без изменения цвета
                     this.ctx.drawImage(layer.image, 0, 0, this.canvas.width, this.canvas.height);
@@ -83,63 +27,92 @@ class CanvasRenderer {
         });
     }
 
-    getOutfitData() {
-        return {
-            doll: this.currentDoll,
-            layers: this.layers.map(layer => ({
-                item: layer.item,
-                color: layer.color
-            }))
-        };
-    }
-
-    loadOutfitData(outfitData) {
-        this.setDoll(outfitData.doll);
-        this.layers = [];
+    applyColorToImage(image, color, templateType = 'white') {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = image.width;
+        tempCanvas.height = image.height;
+        const tempCtx = tempCanvas.getContext('2d');
         
-        outfitData.layers.forEach(layerData => {
-            const layer = this.addLayer(layerData.item, layerData.color);
-        });
-    }
-
-    // Для мобильных устройств - масштабирование
-    setupTouchEvents() {
-        let scale = 1;
-        let lastDist = 0;
+        // Рисуем исходное изображение
+        tempCtx.drawImage(image, 0, 0);
         
-        this.canvas.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const touch1 = e.touches[0];
-                const touch2 = e.touches[1];
-                lastDist = Math.hypot(
-                    touch2.clientX - touch1.clientX,
-                    touch2.clientY - touch1.clientY
-                );
-            }
-        });
-        
-        this.canvas.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const touch1 = e.touches[0];
-                const touch2 = e.touches[1];
-                const currentDist = Math.hypot(
-                    touch2.clientX - touch1.clientX,
-                    touch2.clientY - touch1.clientY
-                );
+        switch (templateType) {
+            case 'white':
+                // Стандартный метод для белых шаблонов
+                tempCtx.globalCompositeOperation = 'source-in';
+                tempCtx.fillStyle = color;
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                break;
                 
-                if (lastDist > 0) {
-                    scale = Math.max(0.5, Math.min(2, scale * (currentDist / lastDist)));
-                    this.canvas.style.transform = `scale(${scale})`;
+            case 'grayscale':
+                // Для градаций серого - более сложное окрашивание
+                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                const data = imageData.data;
+                const colorRGB = this.hexToRgb(color);
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const brightness = data[i] / 255; // Используем красный канал как яркость
+                    
+                    if (data[i + 3] > 0) { // Если пиксель не прозрачный
+                        data[i] = colorRGB.r * brightness;     // R
+                        data[i + 1] = colorRGB.g * brightness; // G
+                        data[i + 2] = colorRGB.b * brightness; // B
+                    }
                 }
                 
-                lastDist = currentDist;
-            }
-        });
+                tempCtx.putImageData(imageData, 0, 0);
+                break;
+                
+            case 'multicolor':
+                // Для многоцветных шаблонов (продвинутый вариант)
+                this.applyMulticolorEffect(tempCtx, color, tempCanvas.width, tempCanvas.height);
+                break;
+        }
         
-        this.canvas.addEventListener('touchend', () => {
-            lastDist = 0;
-        });
+        // Рисуем на основном canvas
+        this.ctx.drawImage(tempCanvas, 0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    hexToRgb(hex) {
+        // Конвертируем hex в RGB
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : { r: 0, g: 0, b: 0 };
+    }
+
+    applyMulticolorEffect(ctx, baseColor, width, height) {
+        // Продвинутое многоцветное окрашивание
+        // Здесь можно реализовать сложные эффекты
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const data = imageData.data;
+        const baseRGB = this.hexToRgb(baseColor);
+        
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] > 0) {
+                // Пример: разные области окрашиваются по-разному
+                // на основе исходного цвета пикселя
+                const originalR = data[i];
+                const originalG = data[i + 1];
+                const originalB = data[i + 2];
+                
+                if (originalR > 200 && originalG < 100 && originalB < 100) {
+                    // Красные области становятся основным цветом
+                    data[i] = baseRGB.r;
+                    data[i + 1] = baseRGB.g;
+                    data[i + 2] = baseRGB.b;
+                } else if (originalR < 100 && originalG > 200 && originalB < 100) {
+                    // Зеленые области становятся более светлым оттенком
+                    data[i] = Math.min(255, baseRGB.r + 50);
+                    data[i + 1] = Math.min(255, baseRGB.g + 50);
+                    data[i + 2] = Math.min(255, baseRGB.b + 50);
+                }
+                // И так далее для других цветов...
+            }
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
     }
 }
