@@ -234,3 +234,55 @@ body {
         height: 350px;
     }
 }
+.error-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #e91e63;
+}
+
+.error-message p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.canvas-container {
+    position: relative;
+    min-height: 500px;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff69b4;
+    font-size: 1.2em;
+}
+.error-message, .no-items-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #e91e63;
+}
+
+.error-message p, .no-items-message p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.clothing-item {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.clothing-item:hover {
+    transform: scale(1.05);
+}
+
+.clothing-item p {
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #333;
+    text-align: center;
+}
