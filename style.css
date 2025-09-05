@@ -1,477 +1,104 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Добавьте в style.css */
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        padding: 10px;
+        max-height: 100vh;
+        overflow: hidden;
+    }
+    
+    .doll-container, .wardrobe-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .doll-container {
+        height: 50vh;
+    }
+    
+    #barbie-canvas {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    
+    .categories-scroll, .items-scroll {
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #wardrobe-categories {
+        flex-wrap: nowrap;
+    }
+    
+    .wardrobe-item {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .controls {
+        flex-wrap: wrap;
+    }
+    
+    .controls button {
+        flex: 1;
+        min-width: 80px;
+        margin: 2px;
+    }
 }
 
-body {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    overflow-x: hidden;
-}
-
-.game-container {
-    width: 100%;
-    max-width: 1200px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    position: relative;
-}
-
-.header {
-    background: linear-gradient(to right, #ff4e7d, #ff6b9d, #ff88c2);
-    padding: 20px;
-    text-align: center;
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-h1 {
-    font-size: 2.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 2;
-}
-
-.glitter {
+/* Color Picker */
+.color-picker {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.glitter-particle {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    animation: glitter 2s infinite;
-}
-
-@keyframes glitter {
-    0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-    10% { opacity: 1; }
-    100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
-}
-
-.game-content {
-    display: flex;
-    padding: 20px;
-    gap: 20px;
-}
-
-.doll-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.doll-container {
-    background: #fff8fc;
-    border-radius: 15px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: inset 0 0 10px rgba(255, 105, 180, 0.3);
-    min-height: 500px;
-    position: relative;
-}
-
-.doll-base {
-    position: relative;
-    width: 250px;
-    height: 500px;
-}
-
-.barbie-base {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.doll {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-}
-
-.clothing-item, .hair-item, .makeup-item {
-    position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: transform 0.3s ease;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.clothing-item {
-    z-index: 2;
-}
-
-.hair-item {
-    z-index: 4;
-}
-
-.makeup-item {
-    z-index: 5;
-}
-
-.saved-outfits {
-    background: #fff0f5;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
     padding: 15px;
-    border-radius: 15px;
-    box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.3);
-    min-height: 150px;
-}
-
-.saved-outfits h3 {
-    text-align: center;
-    margin-bottom: 15px;
-    color: #ff4e7d;
-}
-
-.outfits-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    min-height: 100px;
-}
-
-.outfit-thumbnail {
-    width: 80px;
-    height: 80px;
     border-radius: 10px;
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid transparent;
-    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    z-index: 100;
 }
 
-.outfit-thumbnail:hover {
-    transform: scale(1.1);
-    border: 2px solid #ff4e7d;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+.color-picker.hidden {
+    display: none;
 }
 
-.outfit-thumbnail .outfit-name {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.9);
-    font-size: 0.7rem;
-    text-align: center;
-    padding: 2px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-.no-outfits {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: #ff6b9d;
-    font-style: italic;
-    padding: 20px;
-}
-
-.wardrobe-section {
-    flex: 1;
+.color-presets {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.category-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.category-btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(to right, #ff88a8, #ffb6c1);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.category-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.category-btn.active {
-    background: linear-gradient(to right, #ff4e7d, #ff6b9d);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.controls-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.color-controls, .texture-controls, .glitter-controls {
-    background: #fff0f5;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.3);
-}
-
-.control-group {
-    margin-bottom: 10px;
-}
-
-.control-group h3 {
-    margin-bottom: 10px;
-    color: #ff4e7d;
-    text-align: center;
-    font-size: 1rem;
-}
-
-#color-picker {
-    width: 100%;
-    height: 40px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.preset-colors {
-    display: flex;
-    justify-content: space-around;
     gap: 5px;
-    flex-wrap: wrap;
+    margin: 10px 0;
 }
 
-.color-preset {
+.color-option {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.color-preset:hover {
-    transform: scale(1.2);
-}
-
-.texture-presets, .glitter-presets {
-    display: flex;
-    justify-content: space-around;
-    gap: 5px;
-    flex-wrap: wrap;
-}
-
-.texture-preset, .glitter-preset {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    background-size: cover;
-    background-position: center;
-}
-
-.texture-preset:hover, .glitter-preset:hover {
-    transform: scale(1.2);
-}
-
-.texture-preset.denim {
-    background: linear-gradient(45deg, #6f8ab7 25%, transparent 25%, transparent 50%, #6f8ab7 50%, #6f8ab7 75%, transparent 75%, transparent);
-    background-size: 10px 10px;
-}
-
-.texture-preset.leather {
-    background: linear-gradient(45deg, #3d3d3d, #1a1a1a);
-}
-
-.texture-preset.lace {
-    background: 
-        radial-gradient(circle at 25% 25%, white 2%, transparent 2.5%),
-        radial-gradient(circle at 75% 75%, white 2%, transparent 2.5%),
-        radial-gradient(circle at 25% 75%, white 2%, transparent 2.5%),
-        radial-gradient(circle at 75% 25%, white 2%, transparent 2.5%),
-        #ffc8dd;
-    background-size: 20px 20px;
-}
-
-.texture-preset.silk {
-    background: linear-gradient(45deg, #ff9dc9, #ffc8dd, #ff9dc9);
-}
-
-.glitter-preset[data-glitter="light"] {
-    background: 
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5) 15%, transparent 16%),
-        #ffc8dd;
-}
-
-.glitter-preset[data-glitter="medium"] {
-    background: 
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.7) 15%, transparent 16%),
-        radial-gradient(circle at 60% 60%, rgba(255,255,255,0.7) 15%, transparent 16%),
-        #ff9dc9;
-}
-
-.glitter-preset[data-glitter="heavy"] {
-    background: 
-        radial-gradient(circle at 15% 15%, white 20%, transparent 21%),
-        radial-gradient(circle at 50% 50%, white 20%, transparent 21%),
-        radial-gradient(circle at 85% 85%, white 20%, transparent 21%),
-        #ff6b9d;
-}
-
-.items-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    background: #fff0f5;
-    border-radius: 15px;
-    box-shadow: inset 0 0 8px rgba(255, 105, 180, 0.3);
-}
-
-.item {
-    width: 60px;
-    height: 60px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 2px solid transparent;
-    position: relative;
 }
 
-.item:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    border: 2px solid #ff4e7d;
+.color-option:hover {
+    border-color: #333;
 }
 
-.item-name {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.8);
-    font-size: 0.7rem;
-    text-align: center;
-    padding: 2px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+#color-input {
+    width: 100%;
+    height: 30px;
+    margin: 5px 0;
 }
 
-.actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.action-btn {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(to right, #ff6b9d, #ff88c2);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.action-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.action-btn.save {
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-}
-
-.action-btn.reset {
-    background: linear-gradient(to right, #ff5e62, #ff9966);
-}
-
-.footer {
-    text-align: center;
-    padding: 15px;
-    color: #888;
-    font-size: 0.9rem;
-    background: #f8f8f8;
-}
-
-/* Анимации */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-.pulse {
-    animation: pulse 2s infinite;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .game-content {
-        flex-direction: column;
+/* Для сенсорных устройств */
+@media (hover: none) {
+    .wardrobe-item:hover {
+        transform: none;
+        border-color: transparent;
     }
     
-    .doll-section, .wardrobe-section {
-        width: 100%;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    .category-buttons {
-        flex-direction: column;
-    }
-    
-    .items-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .outfits-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .doll-base {
-        width: 200px;
-        height: 400px;
+    button:active {
+        transform: scale(0.95);
     }
 }
