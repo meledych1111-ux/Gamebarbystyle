@@ -1,118 +1,222 @@
 class CanvasRenderer {
-    // ... остальной код без изменений ...
+    constructor() {
+        this.canvas = null;
+        this.ctx = null;
+        this.dollImage = new Image();
+        this.clothesImages = new Map();
+        this.isRendering = false;
+    }
 
-    render() {
-        // Очищаем canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Рисуем куклу
-        if (this.dollImage) {
-            this.ctx.drawImage(this.dollImage, 0, 0, this.canvas.width, this.canvas.height);
+    init() {
+        this.canvas = document.getElementById('dollCanvas');
+        if (!this.canvas) {
+            console.error('Canvas element not found!');
+            return;
         }
         
-        // Рисуем слои одежды
-        this.layers.forEach(layer => {
-            if (layer.image.complete) {
-                this.ctx.save();
-                
-                if (layer.color && layer.item.colorable !== false) {
-                    this.applyColorToImage(layer.image, layer.color, layer.item.templateType || 'white');
-                } else {
-                    // Рисуем без изменения цвета
-                    this.ctx.drawImage(layer.image, 0, 0, this.canvas.width, this.canvas.height);
-                }
-                
-                this.ctx.restore();
+        this.ctx = this.canvas.getContext('2d');
+        if (!this.ctx) {
+            console.error('Could not get 2D context!');
+            return;
+        }
+        
+        this.ctx.imageSmoothingEnabled = true;
+        this.ctx.imageSmoothingQuality = 'high';
+        
+        // Устанавливаем размеры canvas
+        this.canvas.width = 300;
+        this.canvas.height = 500;
+        
+        // Очищаем canvas при инициализации
+        this.clear();
+    }
+
+    async render(doll, clothes, hairColor, eyesColor) {
+        if (!this.ctx || this.isRendering) return;
+        
+        this.isRendering = true;
+        
+        try {
+            // Очищаем canvas
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+            // Рисуем базовое изображение куклы
+            await this.drawDoll(doll);
+
+            // Рисуем одежду в правильном порядке
+            await this.drawClothes(clothes);
+
+            // Применяем цвета
+            this.applyColors(hairColor, eyesColor);
+            
+        } catch (error) {
+            console.error('Error rendering:', error);
+            // Показываем placeholder при ошибке
+            this.drawErrorPlaceholder();
+        } finally {
+            this.isRendering = false;
+        }
+    }
+
+    async drawDoll(doll) {
+        return new Promise((resolve, reject) => {
+            if (!doll || !doll.image) {
+                reject(new Error('Invalid doll object'));
+                return;
+            }
+
+            if (this.dollImage.src !== doll.image) {
+                this.dollImage.onload = () => {
+                    this.ctx.drawImage(this.dollImage, 0, 0, this.canvas.width, this.canvas.height);
+                    resolve();
+                };
+                this.dollImage.onerror = () => {
+                    reject(new Error('Failed to load doll image'));
+                };
+                this.dollImage.src = doll.image;
+            } else {
+                this.ctx.drawImage(this.dollImage, 0, 0, this.canvas.width, this.canvas.height);
+                resolve();
             }
         });
     }
 
-    applyColorToImage(image, color, templateType = 'white') {
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = image.width;
-        tempCanvas.height = image.height;
-        const tempCtx = tempCanvas.getContext('2d');
+    async drawClothes(clothes) {
+        const drawOrder = ['pants', 'dresses', 'tops', 'shoes', 'accessories'];
         
-        // Рисуем исходное изображение
-        tempCtx.drawImage(image, 0, 0);
-        
-        switch (templateType) {
-            case 'white':
-                // Стандартный метод для белых шаблонов
-                tempCtx.globalCompositeOperation = 'source-in';
-                tempCtx.fillStyle = color;
-                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                break;
-                
-            case 'grayscale':
-                // Для градаций серого - более сложное окрашивание
-                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-                const data = imageData.data;
-                const colorRGB = this.hexToRgb(color);
-                
-                for (let i = 0; i < data.length; i += 4) {
-                    const brightness = data[i] / 255; // Используем красный канал как яркость
-                    
-                    if (data[i + 3] > 0) { // Если пиксель не прозрачный
-                        data[i] = colorRGB.r * brightness;     // R
-                        data[i + 1] = colorRGB.g * brightness; // G
-                        data[i + 2] = colorRGB.b * brightness; // B
-                    }
-                }
-                
-                tempCtx.putImageData(imageData, 0, 0);
-                break;
-                
-            case 'multicolor':
-                // Для многоцветных шаблонов (продвинутый вариант)
-                this.applyMulticolorEffect(tempCtx, color, tempCanvas.width, tempCanvas.height);
-                break;
-        }
-        
-        // Рисуем на основном canvas
-        this.ctx.drawImage(tempCanvas, 0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    hexToRgb(hex) {
-        // Конвертируем hex в RGB
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : { r: 0, g: 0, b: 0 };
-    }
-
-    applyMulticolorEffect(ctx, baseColor, width, height) {
-        // Продвинутое многоцветное окрашивание
-        // Здесь можно реализовать сложные эффекты
-        const imageData = ctx.getImageData(0, 0, width, height);
-        const data = imageData.data;
-        const baseRGB = this.hexToRgb(baseColor);
-        
-        for (let i = 0; i < data.length; i += 4) {
-            if (data[i + 3] > 0) {
-                // Пример: разные области окрашиваются по-разному
-                // на основе исходного цвета пикселя
-                const originalR = data[i];
-                const originalG = data[i + 1];
-                const originalB = data[i + 2];
-                
-                if (originalR > 200 && originalG < 100 && originalB < 100) {
-                    // Красные области становятся основным цветом
-                    data[i] = baseRGB.r;
-                    data[i + 1] = baseRGB.g;
-                    data[i + 2] = baseRGB.b;
-                } else if (originalR < 100 && originalG > 200 && originalB < 100) {
-                    // Зеленые области становятся более светлым оттенком
-                    data[i] = Math.min(255, baseRGB.r + 50);
-                    data[i + 1] = Math.min(255, baseRGB.g + 50);
-                    data[i + 2] = Math.min(255, baseRGB.b + 50);
-                }
-                // И так далее для других цветов...
+        for (const category of drawOrder) {
+            const clothing = clothes[category];
+            if (clothing) {
+                await this.drawClothingItem(clothing);
             }
         }
+    }
+
+    async drawClothingItem(clothing) {
+        return new Promise((resolve, reject) => {
+            if (!clothing || !clothing.image) {
+                resolve(); // Пропускаем если одежда невалидна
+                return;
+            }
+
+            let image = this.clothesImages.get(clothing.id);
+            
+            if (!image) {
+                image = new Image();
+                image.onload = () => {
+                    this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+                    this.clothesImages.set(clothing.id, image);
+                    resolve();
+                };
+                image.onerror = () => {
+                    console.warn('Failed to load clothing image:', clothing.id);
+                    resolve(); // Продолжаем рендер даже если одна вещь не загрузилась
+                };
+                image.src = clothing.image;
+            } else {
+                this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+                resolve();
+            }
+        });
+    }
+
+    drawErrorPlaceholder() {
+        this.ctx.fillStyle = '#ffe6f2';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        ctx.putImageData(imageData, 0, 0);
+        this.ctx.fillStyle = '#ff69b4';
+        this.ctx.font = '16px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('Ошибка загрузки', this.canvas.width / 2, this.canvas.height / 2);
+    }
+
+    applyColors(hairColor, eyesColor) {
+        try {
+            // Создаем временный canvas для обработки цветов
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = this.canvas.width;
+            tempCanvas.height = this.canvas.height;
+
+            // Копируем текущее изображение
+            tempCtx.drawImage(this.canvas, 0, 0);
+
+            // Получаем данные изображения
+            const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+            const data = imageData.data;
+
+            // Применяем цветовые фильтры
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+
+                // Области для окрашивания волос (золотистые оттенки)
+                if (this.isHairColor(r, g, b)) {
+                    this.applyColor(data, i, hairColor);
+                }
+                
+                // Области для окрашивания глаз (голубые оттенки)
+                if (this.isEyesColor(r, g, b)) {
+                    this.applyColor(data, i, eyesColor);
+                }
+            }
+
+            // Возвращаем обработанное изображение
+            this.ctx.putImageData(imageData, 0, 0);
+        } catch (error) {
+            console.error('Error applying colors:', error);
+        }
+    }
+
+    isHairColor(r, g, b) {
+        // Определяем золотистые оттенки (цвет волос по умолчанию)
+        return r > 200 && g > 150 && b < 100 && Math.abs(r - g) < 50;
+    }
+
+    isEyesColor(r, g, b) {
+        // Определяем голубые оттенки (цвет глаз по умолчанию)
+        return b > 150 && r < 100 && g > 100;
+    }
+
+    applyColor(data, index, targetColor) {
+        try {
+            const hex = targetColor.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+
+            // Сохраняем альфа-канал
+            const alpha = data[index + 3];
+            
+            // Применяем новый цвет с сохранением яркости оригинального пикселя
+            const brightness = (data[index] + data[index + 1] + data[index + 2]) / 3;
+            const targetBrightness = (r + g + b) / 3;
+            const ratio = brightness / Math.max(targetBrightness, 1);
+
+            data[index] = Math.min(255, r * ratio);
+            data[index + 1] = Math.min(255, g * ratio);
+            data[index + 2] = Math.min(255, b * ratio);
+            data[index + 3] = alpha;
+        } catch (error) {
+            console.error('Error applying color:', error);
+        }
+    }
+
+    clear() {
+        if (this.ctx) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    }
+
+    // Метод для получения данных canvas (для сохранения)
+    getImageData() {
+        if (!this.canvas) return null;
+        return this.canvas.toDataURL('image/png');
     }
 }
+
+// Создаем экземпляр рендерера
+const canvasRenderer = new CanvasRenderer();
