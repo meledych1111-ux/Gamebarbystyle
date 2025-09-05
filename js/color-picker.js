@@ -1,60 +1,57 @@
 class ColorPicker {
     constructor() {
-        this.picker = document.getElementById('color-picker');
-        this.colorInput = document.getElementById('color-input');
-        this.applyButton = document.getElementById('apply-color');
-        this.cancelButton = document.getElementById('cancel-color');
-        this.colorPresets = document.querySelectorAll('.color-option');
-        this.currentCategory = null;
-        this.currentCallback = null;
-        
-        this.setupEvents();
+        this.hairColorPicker = null;
+        this.eyesColorPicker = null;
+        this.onColorChange = null;
     }
 
-    setupEvents() {
-        this.applyButton.addEventListener('click', () => this.applyColor());
-        this.cancelButton.addEventListener('click', () => this.hide());
+    init(onColorChange) {
+        this.onColorChange = onColorChange;
         
-        this.colorPresets.forEach(preset => {
-            preset.addEventListener('click', (e) => {
-                this.colorInput.value = e.target.dataset.color;
-            });
+        this.hairColorPicker = document.getElementById('hairColor');
+        this.eyesColorPicker = document.getElementById('eyesColor');
+        
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        this.hairColorPicker.addEventListener('input', (e) => {
+            this.handleColorChange('hair', e.target.value);
         });
-        
-        // Закрытие по клику вне пикера
-        document.addEventListener('click', (e) => {
-            if (!this.picker.contains(e.target) && !this.picker.classList.contains('hidden')) {
-                this.hide();
-            }
+
+        this.eyesColorPicker.addEventListener('input', (e) => {
+            this.handleColorChange('eyes', e.target.value);
+        });
+
+        this.hairColorPicker.addEventListener('change', (e) => {
+            this.handleColorChange('hair', e.target.value);
+        });
+
+        this.eyesColorPicker.addEventListener('change', (e) => {
+            this.handleColorChange('eyes', e.target.value);
         });
     }
 
-    show(category, currentColor, callback) {
-        this.currentCategory = category;
-        this.currentCallback = callback;
-        
-        if (currentColor) {
-            this.colorInput.value = currentColor;
+    handleColorChange(type, color) {
+        if (this.onColorChange) {
+            const hairColor = type === 'hair' ? color : this.hairColorPicker.value;
+            const eyesColor = type === 'eyes' ? color : this.eyesColorPicker.value;
+            this.onColorChange(hairColor, eyesColor);
         }
-        
-        this.picker.classList.remove('hidden');
-        
-        // Позиционируем пикер
-        const canvas = document.getElementById('barbie-canvas');
-        const rect = canvas.getBoundingClientRect();
-        this.picker.style.bottom = `${window.innerHeight - rect.top + 10}px`;
     }
 
-    hide() {
-        this.picker.classList.add('hidden');
-        this.currentCategory = null;
-        this.currentCallback = null;
+    getColors() {
+        return {
+            hair: this.hairColorPicker.value,
+            eyes: this.eyesColorPicker.value
+        };
     }
 
-    applyColor() {
-        if (this.currentCallback) {
-            this.currentCallback(this.currentCategory, this.colorInput.value);
-        }
-        this.hide();
+    setColors(hairColor, eyesColor) {
+        this.hairColorPicker.value = hairColor;
+        this.eyesColorPicker.value = eyesColor;
     }
 }
+
+// Создаем экземпляр цветового пикера
+const colorPicker = new ColorPicker();
