@@ -207,3 +207,30 @@ body {
         width: 200px;
     }
 }
+.canvas-container {
+    margin-bottom: 20px;
+}
+
+#dollCanvas {
+    border: 3px solid #ff69b4;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 0 auto;
+}
+
+/*  медиа-запросы для адаптивности canvas */
+@media (max-width: 768px) {
+    #dollCanvas {
+        width: 250px;
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    #dollCanvas {
+        width: 200px;
+        height: 350px;
+    }
+}
