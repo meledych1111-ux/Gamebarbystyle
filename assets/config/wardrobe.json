@@ -35,7 +35,6 @@
         "id": "top-pink",
         "name": "Розовый топ",
         "image": "assets/clothes/tops/top-pink.png",
-        "thumbnail": "assets/clothes/tops/thumbnails/top-pink-thumb.png",
         "layer": "middle"
       },
       {
