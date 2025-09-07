@@ -197,3 +197,6 @@ class BarbieDressUpGame {
 document.addEventListener('DOMContentLoaded', () => {
     window.game = new BarbieDressUpGame();
 });
+document.addEventListener('DOMContentLoaded', () => {
+    window.game = new BarbieDressUpGame();
+});
