@@ -17,8 +17,8 @@
         --secondary-pink: #ff85a2;
         --light-pink: #ffd6e0;
         --dark-pink: #e91e63;
-        --gold: #ffd700;
-        --light-blue: #87ceeb;
+        --purple: #d16bff;
+        --light-purple: #e9b2ff;
         --white: #ffffff;
         --light-gray: #f8f9fa;
         --text-dark: #2d2d2d;
@@ -29,7 +29,7 @@
 
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #ffc0cb 0%, #ff69b4 50%, #ff4d8d 100%);
+        background: linear-gradient(135deg, #ffc0cb 0%, #ff9ecb 25%, #ff85b3 50%, #d16bff 75%, #b84dff 100%);
         min-height: 100vh;
         padding: 20px;
         display: flex;
@@ -61,7 +61,7 @@
         font-size: 3.5rem !important;
         font-weight: 800;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        background: linear-gradient(45deg, var(--dark-pink), var(--primary-pink));
+        background: linear-gradient(45deg, var(--dark-pink), var(--primary-pink), var(--purple));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -89,6 +89,7 @@
         padding: 20px;
         box-shadow: var(--shadow);
         border: 3px solid var(--primary-pink);
+        overflow: hidden;
     }
 
     #dollCanvas {
@@ -105,37 +106,7 @@
         display: block;
     }
 
-    .color-picker-container {
-        background: var(--light-gray);
-        padding: 25px;
-        border-radius: 20px;
-        box-shadow: var(--shadow);
-        width: 100%;
-        text-align: center;
-    }
-
-    .color-picker-container h3 {
-        color: var(--dark-pink);
-        font-size: 1.4rem;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    .color-picker-container input[type="color"] {
-        width: 80px;
-        height: 80px;
-        border: 4px solid var(--primary-pink);
-        border-radius: 50%;
-        cursor: pointer;
-        transition: var(--transition);
-        box-shadow: var(--shadow);
-        margin-bottom: 15px;
-    }
-
-    .color-picker-container input[type="color"]:hover {
-        transform: scale(1.1);
-        box-shadow: var(--shadow-hover);
-    }
+    /* Убраны color-pickers */
 
     .wardrobe-section {
         background: var(--light-gray);
@@ -196,7 +167,7 @@
 
     .clothes-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 25px;
         max-height: 500px;
         overflow-y: auto;
@@ -235,6 +206,24 @@
         border: 3px solid transparent;
         box-shadow: var(--shadow);
         position: relative;
+        overflow: hidden;
+    }
+
+    .clothing-item::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+        opacity: 0;
+    }
+
+    .clothing-item:hover::before {
+        animation: shine 1.5s ease-in-out;
     }
 
     .clothing-item::after {
@@ -263,8 +252,8 @@
     }
 
     .clothing-item img {
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
         object-fit: cover;
         border-radius: 15px;
         margin-bottom: 20px;
@@ -273,8 +262,9 @@
     }
 
     .clothing-item:hover img {
-        transform: scale(1.1);
+        transform: scale(1.15);
         border-color: var(--primary-pink);
+        box-shadow: 0 8px 20px rgba(255, 77, 141, 0.3);
     }
 
     .clothing-item p {
@@ -345,6 +335,75 @@
         box-shadow: 0 15px 35px rgba(46, 213, 115, 0.3);
     }
 
+    /* Анимации */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes shine {
+        0% {
+            opacity: 0;
+            transform: rotate(45deg) translate(-50%, -50%);
+        }
+        20% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+    }
+
+    @keyframes sparkle {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1) rotate(180deg);
+        }
+    }
+
+    .sparkle {
+        position: absolute;
+        pointer-events: none;
+        background: radial-gradient(circle, #fff 20%, transparent 70%);
+        border-radius: 50%;
+        animation: sparkle 1s ease-out;
+    }
+
+    .game-container {
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .clothing-item {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .tab-button {
+        animation: fadeIn 0.4s ease-out;
+    }
+
     /* Адаптивность */
     @media (max-width: 1200px) {
         .game-main {
@@ -377,19 +436,14 @@
         }
         
         .clothing-item img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
         }
         
         .controls button {
             padding: 20px 35px;
             font-size: 1.2rem;
             min-width: 180px;
-        }
-        
-        .color-picker-container input[type="color"] {
-            width: 70px;
-            height: 70px;
         }
     }
 
@@ -410,8 +464,8 @@
         }
         
         .clothing-item img {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
         }
         
         .controls {
@@ -437,12 +491,7 @@
                 <div class="canvas-container">
                     <canvas id="dollCanvas" width="300" height="500"></canvas>
                 </div>
-                <div class="color-picker-container">
-                    <h3>Цвет волос</h3>
-                    <input type="color" id="hairColor" value="#ffd700">
-                    <h3>Цвет глаз</h3>
-                    <input type="color" id="eyesColor" value="#00aaff">
-                </div>
+                <!-- Убраны color pickers -->
             </div>
 
             <div class="wardrobe-section">
