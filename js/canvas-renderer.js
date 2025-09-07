@@ -31,7 +31,7 @@ class CanvasRenderer {
         this.clear();
     }
 
-    async render(doll, clothes, hairColor, eyesColor) {
+    async render(doll, clothes) {
         if (!this.ctx || this.isRendering) return;
         
         this.isRendering = true;
@@ -45,9 +45,6 @@ class CanvasRenderer {
 
             // Рисуем одежду в правильном порядке
             await this.drawClothes(clothes);
-
-            // Применяем цвета
-            this.applyColors(hairColor, eyesColor);
             
         } catch (error) {
             console.error('Error rendering:', error);
@@ -95,7 +92,7 @@ class CanvasRenderer {
     async drawClothingItem(clothing) {
         return new Promise((resolve, reject) => {
             if (!clothing || !clothing.image) {
-                resolve(); // Пропускаем если одежда невалидна
+                resolve();
                 return;
             }
 
@@ -110,7 +107,7 @@ class CanvasRenderer {
                 };
                 image.onerror = () => {
                     console.warn('Failed to load clothing image:', clothing.id);
-                    resolve(); // Продолжаем рендер даже если одна вещь не загрузилась
+                    resolve();
                 };
                 image.src = clothing.image;
             } else {
@@ -130,79 +127,6 @@ class CanvasRenderer {
         this.ctx.fillText('Ошибка загрузки', this.canvas.width / 2, this.canvas.height / 2);
     }
 
-    applyColors(hairColor, eyesColor) {
-        try {
-            // Создаем временный canvas для обработки цветов
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = this.canvas.width;
-            tempCanvas.height = this.canvas.height;
-
-            // Копируем текущее изображение
-            tempCtx.drawImage(this.canvas, 0, 0);
-
-            // Получаем данные изображения
-            const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-            const data = imageData.data;
-
-            // Применяем цветовые фильтры
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
-
-                // Области для окрашивания волос (золотистые оттенки)
-                if (this.isHairColor(r, g, b)) {
-                    this.applyColor(data, i, hairColor);
-                }
-                
-                // Области для окрашивания глаз (голубые оттенки)
-                if (this.isEyesColor(r, g, b)) {
-                    this.applyColor(data, i, eyesColor);
-                }
-            }
-
-            // Возвращаем обработанное изображение
-            this.ctx.putImageData(imageData, 0, 0);
-        } catch (error) {
-            console.error('Error applying colors:', error);
-        }
-    }
-
-    isHairColor(r, g, b) {
-        // Определяем золотистые оттенки (цвет волос по умолчанию)
-        return r > 200 && g > 150 && b < 100 && Math.abs(r - g) < 50;
-    }
-
-    isEyesColor(r, g, b) {
-        // Определяем голубые оттенки (цвет глаз по умолчанию)
-        return b > 150 && r < 100 && g > 100;
-    }
-
-    applyColor(data, index, targetColor) {
-        try {
-            const hex = targetColor.replace('#', '');
-            const r = parseInt(hex.substr(0, 2), 16);
-            const g = parseInt(hex.substr(2, 2), 16);
-            const b = parseInt(hex.substr(4, 2), 16);
-
-            // Сохраняем альфа-канал
-            const alpha = data[index + 3];
-            
-            // Применяем новый цвет с сохранением яркости оригинального пикселя
-            const brightness = (data[index] + data[index + 1] + data[index + 2]) / 3;
-            const targetBrightness = (r + g + b) / 3;
-            const ratio = brightness / Math.max(targetBrightness, 1);
-
-            data[index] = Math.min(255, r * ratio);
-            data[index + 1] = Math.min(255, g * ratio);
-            data[index + 2] = Math.min(255, b * ratio);
-            data[index + 3] = alpha;
-        } catch (error) {
-            console.error('Error applying color:', error);
-        }
-    }
-
     clear() {
         if (this.ctx) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -211,7 +135,6 @@ class CanvasRenderer {
         }
     }
 
-    // Метод для получения данных canvas (для сохранения)
     getImageData() {
         if (!this.canvas) return null;
         return this.canvas.toDataURL('image/png');
