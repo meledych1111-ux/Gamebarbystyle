@@ -17,7 +17,7 @@
         "id": "striped-jumpsuit",
         "name": "Комбенезон в полоску",
         "image": "assets/clothes/dresses/striped-jumpsuit.png",
-         "thumbnail": "assets/clothes/dresses/thumbnails/striped-jumpsuit-thumb.png",
+        "thumbnail": "assets/clothes/dresses/thumbnails/striped-jumpsuit-thumb.png",
         "layer": "over"
       }
     ],
