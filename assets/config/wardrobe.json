@@ -17,7 +17,6 @@
         "id": "striped-jumpsuit",
         "name": "Комбенезон в полоску",
         "image": "assets/clothes/dresses/striped-jumpsuit.png",
-        "thumbnail": "assets/clothes/dresses/thumbnails/striped-jumpsuit-thumb.png",
         "layer": "over"
       }
     ],
@@ -38,7 +37,6 @@
         "id": "top-striped",
         "name": "Полосатая футболка",
         "image": "assets/clothes/tops/top-striped.png",
-        "thumbnail": "assets/clothes/tops/thumbnails/top-striped-thumb.png",
         "layer": "middle"
       }
     ],
@@ -47,7 +45,6 @@
         "id": "denim-shorts",
         "name": "Шорты джинсовые",
         "image": "assets/clothes/pants/denim-shorts.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/denim-shorts-thumb.png",
         "layer": "under"
       },
       {
@@ -60,14 +57,12 @@
         "id": "white-capri",
         "name": "Белые капри",
         "image": "assets/clothes/pants/white-capri.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/white-capri-thumb.png"
         "layer": "under"
       },
       {
         "id": "pink-skirt2",
         "name": "Розовая юбка",
         "image": "assets/clothes/pants/pink-skirt2.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/pink-skirt2-thumb.png"
         "layer": "under"
       },
       {
