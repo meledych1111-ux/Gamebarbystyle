@@ -46,7 +46,7 @@
         "id": "denim-shorts",
         "name": "Шорты джинсовые",
         "image": "assets/clothes/pants/denim-shorts.png",
-        "thumbnail": "assets/clothes/shoes/thumbnails/denim-shorts-thumb.png",
+        "thumbnail": "assets/clothes/pants/thumbnails/denim-shorts-thumb.png",
         "layer": "under"
       },
       {
