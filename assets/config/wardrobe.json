@@ -5,7 +5,7 @@
         "id": "dress-pink",
         "name": "Розовое платье",
         "image": "assets/clothes/dresses/dress-pink.png",
-        "thumbnail": "assets/clothes/dresses/thumbnails/dress-pink-thumb.png"
+        "thumbnail": "assets/clothes/dresses/thumbnails/dress-pink-thumb.png",
         "layer": "over"
       },
       {
@@ -18,7 +18,7 @@
         "id": "striped-jumpsuit",
         "name": "Комбенезон в полоску",
         "image": "assets/clothes/dresses/striped-jumpsuit.png",
-        "thumbnail": "assets/clothes/dresses/thumbnails/striped-jumpsuit-thumb.png"
+        "thumbnail": "assets/clothes/dresses/thumbnails/striped-jumpsuit-thumb.png",
         "layer": "over"
       }
     ],
@@ -47,35 +47,35 @@
         "id": "denim-shorts",
         "name": "Шорты джинсовые",
         "image": "assets/clothes/pants/denim-shorts.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/denim-shorts-thumb.png"
+        "thumbnail": "assets/clothes/pants/thumbnails/denim-shorts-thumb.png",
         "layer": "under"
       },
       {
         "id": "pink-shorts",
         "name": "Розовые шорты",
         "image": "assets/clothes/pants/pink-shorts.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/pink-shorts-thumb.png"
+        "thumbnail": "assets/clothes/pants/thumbnails/pink-shorts-thumb.png",
         "layer": "under"
       },
-        {
+      {
         "id": "white-capri",
         "name": "Белые капри",
         "image": "assets/clothes/pants/white-capri.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/white-capri-thumb.png"
+        "thumbnail": "assets/clothes/pants/thumbnails/white-capri-thumb.png",
         "layer": "under"
       },
       {
         "id": "pink-skirt2",
         "name": "Розовая юбка",
         "image": "assets/clothes/pants/pink-skirt2.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/pink-skirt2-thumb.png"
+        "thumbnail": "assets/clothes/pants/thumbnails/pink-skirt2-thumb.png",
         "layer": "under"
       },
       {
         "id": "striped-skirt",
         "name": "Юбка в полоску",
         "image": "assets/clothes/pants/striped-skirt.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/striped-skirt-thumb.png"
+        "thumbnail": "assets/clothes/pants/thumbnails/striped-skirt-thumb.png",
         "layer": "under"
       }
     ],
@@ -142,3 +142,4 @@
     }
   ]
 }
+
