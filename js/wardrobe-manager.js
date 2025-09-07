@@ -142,4 +142,3 @@ class WardrobeManager {
 
 // Создаем экземпляр менеджера гардероба
 const wardrobeManager = new WardrobeManager();
-const wardrobeManager = new WardrobeManager();
