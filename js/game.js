@@ -8,8 +8,6 @@ class BarbieDressUpGame {
             shoes: null,
             accessories: null
         };
-        this.hairColor = '#ffd700';
-        this.eyesColor = '#00aaff';
         
         this.init();
     }
@@ -22,7 +20,6 @@ class BarbieDressUpGame {
             // Инициализация компонентов
             this.initWardrobe();
             this.initCanvas();
-            this.initColorPickers();
             this.initEventListeners();
             
             // Установка куклы по умолчанию
@@ -35,74 +32,101 @@ class BarbieDressUpGame {
     }
 
     initWardrobe() {
-        wardrobeManager.init();
+        if (typeof wardrobeManager !== 'undefined') {
+            wardrobeManager.init();
+        }
     }
 
     initCanvas() {
-        canvasRenderer.init();
-    }
-
-    initColorPickers() {
-        colorPicker.init(this.updateColors.bind(this));
+        if (typeof canvasRenderer !== 'undefined') {
+            canvasRenderer.init();
+        }
     }
 
     initEventListeners() {
         // Кнопки сброса и сохранения
-        document.getElementById('resetBtn').addEventListener('click', () => this.reset());
-        document.getElementById('saveBtn').addEventListener('click', () => this.saveOutfit());
+        const resetBtn = document.getElementById('resetBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => this.reset());
+        }
+        
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => this.saveOutfit());
+        }
 
         // Переключение категорий
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', (e) => {
                 const category = e.target.dataset.category;
                 this.switchCategory(category);
+                
+                // Убираем active у всех и добавляем текущему
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
                 e.target.classList.add('active');
             });
         });
 
         // Обработчик выбора одежды
-        document.getElementById('clothesGrid').addEventListener('click', (e) => {
-            const clothingItem = e.target.closest('.clothing-item');
-            if (clothingItem) {
-                const itemId = clothingItem.dataset.itemId;
-                const category = clothingItem.dataset.category;
-                this.selectClothing(itemId, category);
-            }
-        });
+        const clothesGrid = document.getElementById('clothesGrid');
+        if (clothesGrid) {
+            clothesGrid.addEventListener('click', (e) => {
+                const clothingItem = e.target.closest('.clothing-item');
+                if (clothingItem) {
+                    this.createSparkleEffect(e);
+                    const itemId = clothingItem.dataset.itemId;
+                    const category = clothingItem.dataset.category;
+                    this.selectClothing(itemId, category);
+                }
+            });
+        }
+    }
+
+    createSparkleEffect(event) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.width = '20px';
+        sparkle.style.height = '20px';
+        sparkle.style.left = (event.clientX - 10) + 'px';
+        sparkle.style.top = (event.clientY - 10) + 'px';
+        sparkle.style.position = 'fixed';
+        sparkle.style.zIndex = '1000';
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => {
+            sparkle.remove();
+        }, 1000);
     }
 
     setDoll(dollId) {
-        this.currentDoll = assetLoader.getDoll(dollId);
-        this.render();
-    }
-
-    selectClothing(itemId, category) {
-        const clothing = assetLoader.getClothing(itemId, category);
-        if (clothing) {
-            this.currentClothes[category] = clothing;
+        if (assetLoader && assetLoader.getDoll) {
+            this.currentDoll = assetLoader.getDoll(dollId);
             this.render();
         }
     }
 
-    switchCategory(category) {
-        // Убираем активный класс у всех кнопок
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        // Показываем одежду выбранной категории
-        wardrobeManager.showCategory(category);
+    selectClothing(itemId, category) {
+        if (assetLoader && assetLoader.getClothing) {
+            const clothing = assetLoader.getClothing(itemId, category);
+            if (clothing) {
+                this.currentClothes[category] = clothing;
+                this.render();
+            }
+        }
     }
 
-    updateColors(hairColor, eyesColor) {
-        this.hairColor = hairColor;
-        this.eyesColor = eyesColor;
-        this.render();
+    switchCategory(category) {
+        if (wardrobeManager && wardrobeManager.showCategory) {
+            wardrobeManager.showCategory(category);
+        }
     }
 
     render() {
-        if (this.currentDoll) {
-            canvasRenderer.render(this.currentDoll, this.currentClothes, this.hairColor, this.eyesColor);
+        if (this.currentDoll && canvasRenderer && canvasRenderer.render) {
+            canvasRenderer.render(this.currentDoll, this.currentClothes);
         }
     }
 
@@ -114,28 +138,43 @@ class BarbieDressUpGame {
             shoes: null,
             accessories: null
         };
-        this.hairColor = '#ffd700';
-        this.eyesColor = '#00aaff';
-        
-        // Сброс цветовых пикеров
-        document.getElementById('hairColor').value = this.hairColor;
-        document.getElementById('eyesColor').value = this.eyesColor;
         
         this.render();
     }
 
     saveOutfit() {
         const canvas = document.getElementById('dollCanvas');
-        const image = canvas.toDataURL('image/png');
+        if (!canvas) return;
         
-        const link = document.createElement('a');
-        link.download = 'barbie-outfit.png';
-        link.href = image;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            const image = canvas.toDataURL('image/png');
+            
+            const link = document.createElement('a');
+            link.download = 'barbie-outfit.png';
+            link.href = image;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Анимация сохранения
+            this.createSaveAnimation();
+            
+        } catch (error) {
+            console.error('Ошибка сохранения:', error);
+            alert('Ошибка при сохранении образа');
+        }
+    }
+
+    createSaveAnimation() {
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+            saveBtn.style.animation = 'pulse 0.5s ease-in-out';
+            setTimeout(() => {
+                saveBtn.style.animation = '';
+            }, 500);
+        }
         
-        alert('Образ сохранен!');
+        alert('Образ сохранен! ✨');
     }
 }
 
