@@ -8,6 +8,7 @@ class BarbieDressUpGame {
             shoes: null,
             accessories: null
         };
+        this.selectedItems = new Set(); // Для отслеживания выбранной одежды
         
         this.init();
     }
@@ -39,6 +40,12 @@ class BarbieDressUpGame {
 
     initCanvas() {
         if (typeof canvasRenderer !== 'undefined') {
+            // Устанавливаем размер canvas согласно HTML
+            const canvas = document.getElementById('dollCanvas');
+            if (canvas) {
+                canvas.width = 400;
+                canvas.height = 650;
+            }
             canvasRenderer.init();
         }
     }
@@ -77,9 +84,10 @@ class BarbieDressUpGame {
                 const clothingItem = e.target.closest('.clothing-item');
                 if (clothingItem) {
                     this.createSparkleEffect(e);
+                    this.createSnowAnimation(); // Анимация снега
                     const itemId = clothingItem.dataset.itemId;
                     const category = clothingItem.dataset.category;
-                    this.selectClothing(itemId, category);
+                    this.toggleClothing(itemId, category, clothingItem);
                 }
             });
         }
@@ -101,6 +109,30 @@ class BarbieDressUpGame {
         }, 1000);
     }
 
+    createSnowAnimation() {
+        // Создаем 15 снежинок
+        for (let i = 0; i < 15; i++) {
+            this.createSnowflake();
+        }
+    }
+
+    createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.innerHTML = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.animationDuration = (2 + Math.random() * 3) + 's';
+        snowflake.style.fontSize = (15 + Math.random() * 15) + 'px';
+        snowflake.style.opacity = '0.8';
+        
+        document.body.appendChild(snowflake);
+        
+        // Удаляем снежинку после анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 3000);
+    }
+
     setDoll(dollId) {
         if (assetLoader && assetLoader.getDoll) {
             this.currentDoll = assetLoader.getDoll(dollId);
@@ -108,14 +140,45 @@ class BarbieDressUpGame {
         }
     }
 
-    selectClothing(itemId, category) {
+    toggleClothing(itemId, category, clothingElement) {
         if (assetLoader && assetLoader.getClothing) {
             const clothing = assetLoader.getClothing(itemId, category);
             if (clothing) {
-                this.currentClothes[category] = clothing;
+                const itemKey = `${category}-${itemId}`;
+                
+                // Проверяем, выбрана ли уже эта одежда
+                if (this.selectedItems.has(itemKey)) {
+                    // Снимаем одежду
+                    this.currentClothes[category] = null;
+                    this.selectedItems.delete(itemKey);
+                    clothingElement.classList.remove('selected');
+                } else {
+                    // Одеваем одежду
+                    this.currentClothes[category] = clothing;
+                    this.selectedItems.add(itemKey);
+                    clothingElement.classList.add('selected');
+                    
+                    // Снимаем выделение с другой одежды в этой категории
+                    this.clearOtherSelections(category, itemKey);
+                }
+                
                 this.render();
             }
         }
+    }
+
+    clearOtherSelections(currentCategory, currentItemKey) {
+        // Убираем выделение с другой одежды в этой же категории
+        document.querySelectorAll('.clothing-item').forEach(item => {
+            const category = item.dataset.category;
+            const itemId = item.dataset.itemId;
+            const itemKey = `${category}-${itemId}`;
+            
+            if (category === currentCategory && itemKey !== currentItemKey) {
+                item.classList.remove('selected');
+                this.selectedItems.delete(itemKey);
+            }
+        });
     }
 
     switchCategory(category) {
@@ -131,6 +194,7 @@ class BarbieDressUpGame {
     }
 
     reset() {
+        // Сбрасываем всю одежду
         this.currentClothes = {
             dresses: null,
             tops: null,
@@ -138,6 +202,15 @@ class BarbieDressUpGame {
             shoes: null,
             accessories: null
         };
+        
+        // Очищаем выделения
+        this.selectedItems.clear();
+        document.querySelectorAll('.clothing-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Анимация сброса
+        this.createSnowAnimation();
         
         this.render();
     }
@@ -173,6 +246,9 @@ class BarbieDressUpGame {
                 saveBtn.style.animation = '';
             }, 500);
         }
+        
+        // Анимация снега при сохранении
+        this.createSnowAnimation();
         
         alert('Образ сохранен! ✨');
     }
