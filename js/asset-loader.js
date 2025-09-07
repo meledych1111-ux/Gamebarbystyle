@@ -8,161 +8,151 @@ class AssetLoader {
     }
 
     async loadAssets() {
+        console.log('Loading assets...');
+        
         try {
-            // Загружаем конфигурацию гардероба
+            // Пробуем загрузить конфиг
             await this.loadWardrobeConfig();
-            
-            // Предзагружаем изображения кукол
-            await this.preloadDolls();
-            
-            // Предзагружаем изображения одежды
-            await this.preloadClothes();
-            
-            console.log('All assets loaded successfully');
+            console.log('Config loaded successfully');
             
         } catch (error) {
-            console.error('Error loading assets:', error);
-            // Создаем заглушки для демонстрации
+            console.warn('Failed to load config, using fallback:', error);
+            // Создаем fallback ассеты
             this.createFallbackAssets();
         }
+        
+        // Всегда создаем fallback на случай ошибок
+        this.ensureFallbackAssets();
+        
+        console.log('Assets ready:', {
+            dolls: Object.keys(this.assets.dolls),
+            clothes: Object.keys(this.assets.clothes)
+        });
     }
 
     async loadWardrobeConfig() {
         try {
             const response = await fetch('assets/config/wardrobe.json');
+            if (!response.ok) throw new Error('HTTP error ' + response.status);
+            
             this.assets.wardrobeConfig = await response.json();
+            this.processConfig();
+            
         } catch (error) {
-            console.warn('Failed to load wardrobe config, using fallback');
-            this.assets.wardrobeConfig = this.createFallbackConfig();
+            throw new Error('Config load failed: ' + error.message);
         }
     }
 
-    async preloadDolls() {
-        if (!this.assets.wardrobeConfig?.dolls) return;
-
-        for (const doll of this.assets.wardrobeConfig.dolls) {
-            this.assets.dolls[doll.id] = doll;
+    processConfig() {
+        if (!this.assets.wardrobeConfig) return;
+        
+        // Загружаем кукол
+        if (this.assets.wardrobeConfig.dolls) {
+            this.assets.wardrobeConfig.dolls.forEach(doll => {
+                this.assets.dolls[doll.id] = doll;
+            });
+        }
+        
+        // Загружаем одежду
+        if (this.assets.wardrobeConfig.categories) {
+            Object.values(this.assets.wardrobeConfig.categories).forEach(items => {
+                items.forEach(item => {
+                    this.assets.clothes[item.id] = item;
+                });
+            });
         }
     }
 
-    async preloadClothes() {
-        if (!this.assets.wardrobeConfig?.categories) return;
-
-        for (const [category, items] of Object.entries(this.assets.wardrobeConfig.categories)) {
-            for (const item of items) {
-                this.assets.clothes[item.id] = item;
-            }
+    ensureFallbackAssets() {
+        // Гарантируем что хотя бы одна кукла есть
+        if (Object.keys(this.assets.dolls).length === 0) {
+            this.assets.dolls['barbie-base'] = this.createFallbackDoll();
         }
-    }
-
-    getWardrobeConfig() {
-        return this.assets.wardrobeConfig;
-    }
-
-    getDoll(dollId) {
-        return this.assets.dolls[dollId] || this.assets.dolls['barbie-base'];
-    }
-
-    getClothing(itemId, category) {
-        return this.assets.clothes[itemId];
-    }
-
-    getAllClothesByCategory(category) {
-        if (!this.assets.wardrobeConfig?.categories?.[category]) return [];
-        return this.assets.wardrobeConfig.categories[category];
-    }
-
-    createFallbackConfig() {
-        return {
-            categories: {
-                dresses: [
-                    {
-                        id: "dress-pink",
-                        name: "Розовое платье",
-                        image: this.createDummyImage(200, 300, '#ffb6c1'),
-                        thumbnail: this.createDummyImage(80, 80, '#ffb6c1'),
-                        layer: "over"
-                    }
-                ],
-                tops: [
-                    {
-                        id: "top-white",
-                        name: "Белая блузка",
-                        image: this.createDummyImage(150, 200, '#ffffff'),
-                        thumbnail: this.createDummyImage(80, 80, '#ffffff'),
-                        layer: "middle"
-                    }
-                ],
-                pants: [
-                    {
-                        id: "pants-jeans",
-                        name: "Джинсы",
-                        image: this.createDummyImage(150, 250, '#1e90ff'),
-                        thumbnail: this.createDummyImage(80, 80, '#1e90ff'),
-                        layer: "under"
-                    }
-                ],
-                shoes: [
-                    {
-                        id: "shoes-heels",
-                        name: "Туфли",
-                        image: this.createDummyImage(100, 80, '#8b4513'),
-                        thumbnail: this.createDummyImage(80, 80, '#8b4513'),
-                        layer: "shoes"
-                    }
-                ],
-                accessories: [
-                    {
-                        id: "necklace",
-                        name: "Ожерелье",
-                        image: this.createDummyImage(80, 40, '#ffd700'),
-                        thumbnail: this.createDummyImage(80, 80, '#ffd700'),
-                        layer: "accessories"
-                    }
-                ]
-            },
-            dolls: [
-                {
-                    id: "barbie-base",
-                    name: "Барби",
-                    image: this.createDollSilhouette(),
-                    defaultHairColor: "#ffd700",
-                    defaultEyesColor: "#00aaff"
-                }
-            ]
-        };
+        
+        // Гарантируем что есть хотя бы один предмет одежды
+        if (Object.keys(this.assets.clothes).length === 0) {
+            this.assets.clothes['dress-fallback'] = this.createFallbackDress();
+        }
     }
 
     createFallbackAssets() {
-        this.assets.wardrobeConfig = this.createFallbackConfig();
+        console.log('Creating fallback assets...');
         
-        // Добавляем куклу
-        this.assets.dolls['barbie-base'] = {
+        this.assets.wardrobeConfig = {
+            categories: {
+                dresses: [this.createFallbackDress()],
+                tops: [this.createFallbackTop()],
+                pants: [this.createFallbackPants()],
+                shoes: [this.createFallbackShoes()],
+                accessories: [this.createFallbackAccessory()]
+            },
+            dolls: [this.createFallbackDoll()]
+        };
+        
+        this.processConfig();
+    }
+
+    createFallbackDoll() {
+        return {
             id: "barbie-base",
             name: "Барби",
             image: this.createDollSilhouette(),
             defaultHairColor: "#ffd700",
             defaultEyesColor: "#00aaff"
         };
-
-        // Добавляем базовую одежду
-        const categories = ['dresses', 'tops', 'pants', 'shoes', 'accessories'];
-        const colors = ['#ffb6c1', '#ffffff', '#1e90ff', '#8b4513', '#ffd700'];
-        const names = ['Платье', 'Топ', 'Брюки', 'Обувь', 'Аксессуар'];
-
-        categories.forEach((category, index) => {
-            const itemId = `${category}-fallback`;
-            this.assets.clothes[itemId] = {
-                id: itemId,
-                name: names[index],
-                image: this.createDummyImage(200, 300, colors[index]),
-                thumbnail: this.createDummyImage(80, 80, colors[index]),
-                layer: category
-            };
-        });
     }
 
-    createDummyImage(width, height, color) {
+    createFallbackDress() {
+        return {
+            id: "dress-fallback",
+            name: "Розовое платье",
+            image: this.createClothingPlaceholder('#ff69b4', 300, 500),
+            thumbnail: this.createClothingPlaceholder('#ff69b4', 80, 80),
+            layer: "over"
+        };
+    }
+
+    createFallbackTop() {
+        return {
+            id: "top-fallback", 
+            name: "Белый топ",
+            image: this.createClothingPlaceholder('#ffffff', 200, 300),
+            thumbnail: this.createClothingPlaceholder('#ffffff', 80, 80),
+            layer: "middle"
+        };
+    }
+
+    createFallbackPants() {
+        return {
+            id: "pants-fallback",
+            name: "Джинсы",
+            image: this.createClothingPlaceholder('#1e90ff', 200, 400),
+            thumbnail: this.createClothingPlaceholder('#1e90ff', 80, 80),
+            layer: "under"
+        };
+    }
+
+    createFallbackShoes() {
+        return {
+            id: "shoes-fallback",
+            name: "Туфли",
+            image: this.createClothingPlaceholder('#8b4513', 150, 100),
+            thumbnail: this.createClothingPlaceholder('#8b4513', 80, 80),
+            layer: "shoes"
+        };
+    }
+
+    createFallbackAccessory() {
+        return {
+            id: "accessory-fallback",
+            name: "Аксессуар",
+            image: this.createClothingPlaceholder('#ffd700', 100, 100),
+            thumbnail: this.createClothingPlaceholder('#ffd700', 80, 80),
+            layer: "accessories"
+        };
+    }
+
+    createClothingPlaceholder(color, width, height) {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -242,6 +232,23 @@ class AssetLoader {
         ctx.fillText('Барби', 150, 400);
         
         return canvas.toDataURL();
+    }
+
+    getWardrobeConfig() {
+        return this.assets.wardrobeConfig;
+    }
+
+    getDoll(dollId) {
+        return this.assets.dolls[dollId] || this.assets.dolls['barbie-base'];
+    }
+
+    getClothing(itemId, category) {
+        return this.assets.clothes[itemId];
+    }
+
+    getAllClothesByCategory(category) {
+        if (!this.assets.wardrobeConfig?.categories?.[category]) return [];
+        return this.assets.wardrobeConfig.categories[category];
     }
 }
 
