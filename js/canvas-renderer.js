@@ -143,3 +143,29 @@ class CanvasRenderer {
 
 // Создаем экземпляр рендерера
 const canvasRenderer = new CanvasRenderer();
+async drawDoll(doll) {
+    return new Promise((resolve) => {
+        if (!doll || !doll.image) {
+            console.error('Нет данных куклы');
+            this.drawErrorPlaceholder();
+            resolve();
+            return;
+        }
+
+        if (this.dollImage.src !== doll.image) {
+            this.dollImage.onload = () => {
+                this.ctx.drawImage(this.dollImage, 0, 0, this.canvas.width, this.canvas.height);
+                resolve();
+            };
+            this.dollImage.onerror = () => {
+                console.error('Не удалось загрузить изображение куклы');
+                this.drawErrorPlaceholder();
+                resolve();
+            };
+            this.dollImage.src = doll.image;
+        } else {
+            this.ctx.drawImage(this.dollImage, 0, 0, this.canvas.width, this.canvas.height);
+            resolve();
+        }
+    });
+}
