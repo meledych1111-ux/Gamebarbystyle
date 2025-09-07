@@ -5,30 +5,26 @@
         "id": "dress-pink",
         "name": "Розовое платье",
         "image": "assets/clothes/dresses/dress-pink.png",
-        "thumbnail": "assets/clothes/dresses/thumbnails/dress-pink-thumb.png",
         "layer": "over"
       },
       {
         "id": "dress-blue",
         "name": "Голубое платье",
         "image": "assets/clothes/dresses/dress-blue.png",
-        "thumbnail": "assets/clothes/dresses/thumbnails/dress-blue-thumb.png",
         "layer": "over"
       },
       {
-        "id": "dress-party",
-        "name": "Вечернее платье",
+        "id": "striped-jumpsuit",
+        "name": "Комбенезон в полоску",
         "image": "assets/clothes/dresses/dress-party.png",
-        "thumbnail": "assets/clothes/dresses/thumbnails/dress-party-thumb.png",
         "layer": "over"
       }
     ],
     "tops": [
       {
-        "id": "top-white",
-        "name": "Белая блузка",
+        "id": "pink-shirt",
+        "name": "Розовая рубашка",
         "image": "assets/clothes/tops/top-white.png",
-        "thumbnail": "assets/clothes/tops/thumbnails/top-white-thumb.png",
         "layer": "middle"
       },
       {
@@ -47,24 +43,33 @@
     ],
     "pants": [
       {
-        "id": "pants-jeans",
-        "name": "Джинсы",
+        "id": "denim-shorts",
+        "name": "Шорты джинсовые",
         "image": "assets/clothes/pants/pants-jeans.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/pants-jeans-thumb.png",
         "layer": "under"
       },
       {
-        "id": "pants-pink",
-        "name": "Розовые брюки",
+        "id": "pink-shorts",
+        "name": "Розовые шорты",
         "image": "assets/clothes/pants/pants-pink.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/pants-pink-thumb.png",
+        "layer": "under"
+      },
+        {
+        "id": "white-capri",
+        "name": "Белые капри",
+        "image": "assets/clothes/pants/pants-pink.png",
         "layer": "under"
       },
       {
-        "id": "skirt-black",
-        "name": "Черная юбка",
+        "id": "pink-skirt2",
+        "name": "Розовая юбка",
+        "image": "assets/clothes/pants/pants-pink.png",
+        "layer": "under"
+      },
+      {
+        "id": "striped-skirt",
+        "name": "Юбка в полоску",
         "image": "assets/clothes/pants/skirt-black.png",
-        "thumbnail": "assets/clothes/pants/thumbnails/skirt-black-thumb.png",
         "layer": "under"
       }
     ],
@@ -110,7 +115,6 @@
         "id": "hat-sun",
         "name": "Соломенная шляпа",
         "image": "assets/clothes/accessories/hat-sun.png",
-        "thumbnail": "assets/clothes/accessories/thumbnails/hat-sun-thumb.png",
         "layer": "accessories"
       }
     ]
