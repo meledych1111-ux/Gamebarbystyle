@@ -133,30 +133,34 @@
         box-shadow: var(--shadow);
         max-height: 900px;
         overflow-y: auto;
+        /* ФИКСИРУЕМ ШИРИНУ ЧТОБЫ НЕ СДВИГАЛОСЬ */
+        min-width: 450px;
+        width: 100%;
     }
 
     .category-tabs {
         display: flex;
-        gap: 15px;
+        gap: 12px;
         margin-bottom: 35px;
         flex-wrap: wrap;
         justify-content: center;
     }
 
     .tab-button {
-        padding: 22px 40px;
+        padding: 18px 30px;
         border: none;
         border-radius: 50px;
         background: linear-gradient(145deg, var(--primary-pink), var(--secondary-pink));
         color: var(--white);
         font-weight: 700;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         cursor: pointer;
         transition: var(--transition);
         box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
-        min-width: 160px;
+        min-width: 130px;
+        white-space: nowrap;
     }
 
     .tab-button::before {
@@ -185,11 +189,11 @@
         box-shadow: 0 15px 35px rgba(233, 30, 99, 0.4);
     }
 
-    /* СТИЛЬ ДЛЯ ОДЕЖДЫ */
+    /* РАСШИРЕННЫЕ ПРЯМОУГОЛЬНИКИ ДЛЯ ОДЕЖДЫ */
     .clothes-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
         max-height: 700px;
         overflow-y: auto;
         padding: 25px;
@@ -215,6 +219,8 @@
         align-items: center;
         min-height: 320px;
         justify-content: space-between;
+        /* ШИРИНА ДЛЯ ПОЛНОГО НАЗВАНИЯ */
+        min-width: 220px;
     }
 
     .clothing-item.selected {
@@ -287,7 +293,7 @@
     /* ПОЛНОРАЗМЕРНЫЕ ИЗОБРАЖЕНИЯ */
     .clothing-item img {
         width: 100%;
-        height: 200px;
+        height: 180px;
         object-fit: contain;
         margin-bottom: 15px;
         transition: var(--transition);
@@ -300,16 +306,25 @@
         transform: scale(1.1);
     }
 
+    /* РАСШИРЕННОЕ НАЗВАНИЕ - МНОГОСТРОЧНОЕ */
     .clothing-item p {
         font-size: 1.1rem;
         color: var(--text-dark);
         font-weight: 600;
         margin: 0;
         transition: var(--transition);
-        padding: 10px 15px;
+        padding: 12px 15px;
         background: var(--light-pink);
         border-radius: 15px;
         width: 100%;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        word-wrap: break-word;
+        white-space: normal;
+        line-height: 1.3;
     }
 
     .clothing-item:hover p {
@@ -423,16 +438,6 @@
         }
     }
 
-    /* ПРОСТАЯ АНИМАЦИЯ ДЛЯ ОДЕЖДЫ (ВМЕСТО СНЕГА) */
-    @keyframes gentleGlow {
-        0%, 100% {
-            box-shadow: 0 0 20px rgba(255, 77, 141, 0.3);
-        }
-        50% {
-            box-shadow: 0 0 40px rgba(255, 77, 141, 0.6);
-        }
-    }
-
     .sparkle {
         position: absolute;
         pointer-events: none;
@@ -468,6 +473,14 @@
         #dollCanvas {
             height: 700px;
         }
+        
+        .wardrobe-section {
+            min-width: 400px;
+        }
+        
+        .clothes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
     }
 
     @media (max-width: 1200px) {
@@ -488,6 +501,11 @@
         
         .wardrobe-section {
             max-height: 800px;
+            min-width: 100%;
+        }
+        
+        .clothes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
     }
 
@@ -517,24 +535,36 @@
         }
         
         .tab-button {
-            padding: 20px 35px;
-            font-size: 1.2rem;
-            min-width: 140px;
+            padding: 16px 25px;
+            font-size: 1.1rem;
+            min-width: 110px;
         }
         
         .clothing-item {
             padding: 18px;
             min-height: 280px;
+            min-width: 180px;
         }
         
         .clothing-item img {
             height: 160px;
         }
         
+        .clothing-item p {
+            font-size: 1rem;
+            padding: 10px 12px;
+            min-height: 50px;
+        }
+        
         .controls button {
             padding: 25px 40px;
             font-size: 1.3rem;
             min-width: 200px;
+        }
+        
+        .clothes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
         }
     }
 
@@ -555,24 +585,31 @@
         }
         
         .tab-button {
-            padding: 18px 25px;
-            font-size: 1.1rem;
-            min-width: 120px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            min-width: 90px;
         }
         
         .clothes-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 12px;
             padding: 20px;
         }
         
         .clothing-item {
             min-height: 250px;
             padding: 15px;
+            min-width: 150px;
         }
         
         .clothing-item img {
             height: 140px;
+        }
+        
+        .clothing-item p {
+            font-size: 0.9rem;
+            padding: 8px 10px;
+            min-height: 45px;
         }
         
         .controls {
