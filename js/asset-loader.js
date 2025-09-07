@@ -8,15 +8,15 @@ class AssetLoader {
     }
 
     async loadAssets() {
-        console.log('Loading assets...');
+        console.log('🔄 Загрузка ассетов...');
         
         try {
             // Пробуем загрузить конфиг
             await this.loadWardrobeConfig();
-            console.log('Config loaded successfully');
+            console.log('✅ Конфиг успешно загружен');
             
         } catch (error) {
-            console.warn('Failed to load config, using fallback:', error);
+            console.warn('⚠️ Ошибка загрузки конфига, использую fallback:', error);
             // Создаем fallback ассеты
             this.createFallbackAssets();
         }
@@ -24,22 +24,26 @@ class AssetLoader {
         // Всегда создаем fallback на случай ошибок
         this.ensureFallbackAssets();
         
-        console.log('Assets ready:', {
-            dolls: Object.keys(this.assets.dolls),
-            clothes: Object.keys(this.assets.clothes)
+        console.log('🎉 Ассеты готовы:', {
+            куклы: Object.keys(this.assets.dolls),
+            одежда: Object.keys(this.assets.clothes)
         });
+        
+        return true;
     }
 
     async loadWardrobeConfig() {
         try {
             const response = await fetch('assets/config/wardrobe.json');
-            if (!response.ok) throw new Error('HTTP error ' + response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP ошибка ${response.status}`);
+            }
             
             this.assets.wardrobeConfig = await response.json();
             this.processConfig();
             
         } catch (error) {
-            throw new Error('Config load failed: ' + error.message);
+            throw new Error(`Ошибка загрузки конфига: ${error.message}`);
         }
     }
 
@@ -49,7 +53,9 @@ class AssetLoader {
         // Загружаем кукол
         if (this.assets.wardrobeConfig.dolls) {
             this.assets.wardrobeConfig.dolls.forEach(doll => {
-                this.assets.dolls[doll.id] = doll;
+                if (doll.id && doll.image) {
+                    this.assets.dolls[doll.id] = doll;
+                }
             });
         }
         
@@ -57,7 +63,9 @@ class AssetLoader {
         if (this.assets.wardrobeConfig.categories) {
             Object.values(this.assets.wardrobeConfig.categories).forEach(items => {
                 items.forEach(item => {
-                    this.assets.clothes[item.id] = item;
+                    if (item.id) {
+                        this.assets.clothes[item.id] = item;
+                    }
                 });
             });
         }
@@ -76,7 +84,7 @@ class AssetLoader {
     }
 
     createFallbackAssets() {
-        console.log('Creating fallback assets...');
+        console.log('🛠️ Создаю fallback ассеты...');
         
         this.assets.wardrobeConfig = {
             categories: {
@@ -153,85 +161,106 @@ class AssetLoader {
     }
 
     createClothingPlaceholder(color, width, height) {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        
-        ctx.fillStyle = color;
-        ctx.fillRect(0, 0, width, height);
-        
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(5, 5, width - 10, height - 10);
-        
-        return canvas.toDataURL();
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            
+            // Фон
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Рамка
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(5, 5, width - 10, height - 10);
+            
+            // Текст
+            ctx.fillStyle = '#000';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${width}x${height}`, width / 2, height / 2);
+            
+            return canvas.toDataURL();
+        } catch (error) {
+            console.error('Ошибка создания placeholder:', error);
+            return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23ff69b4"/></svg>';
+        }
     }
 
     createDollSilhouette() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 300;
-        canvas.height = 500;
-        const ctx = canvas.getContext('2d');
-        
-        // Фон
-        ctx.fillStyle = '#ffe6f2';
-        ctx.fillRect(0, 0, 300, 500);
-        
-        // Силуэт куклы
-        ctx.fillStyle = '#ffb6c1';
-        ctx.beginPath();
-        
-        // Голова
-        ctx.arc(150, 100, 40, 0, Math.PI * 2);
-        
-        // Тело
-        ctx.moveTo(130, 140);
-        ctx.lineTo(130, 250);
-        ctx.lineTo(170, 250);
-        ctx.lineTo(170, 140);
-        ctx.closePath();
-        
-        // Ноги
-        ctx.moveTo(130, 250);
-        ctx.lineTo(120, 350);
-        ctx.lineTo(140, 350);
-        ctx.lineTo(150, 250);
-        
-        ctx.moveTo(170, 250);
-        ctx.lineTo(160, 350);
-        ctx.lineTo(180, 350);
-        ctx.lineTo(190, 250);
-        
-        ctx.fill();
-        
-        // Волосы
-        ctx.fillStyle = '#ffd700';
-        ctx.beginPath();
-        ctx.arc(150, 80, 50, Math.PI, Math.PI * 2);
-        ctx.fill();
-        
-        // Глаза
-        ctx.fillStyle = '#00aaff';
-        ctx.beginPath();
-        ctx.arc(135, 95, 8, 0, Math.PI * 2);
-        ctx.arc(165, 95, 8, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Улыбка
-        ctx.strokeStyle = '#ff69b4';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(150, 115, 15, 0.2, Math.PI - 0.2);
-        ctx.stroke();
-        
-        // Текст
-        ctx.fillStyle = '#ff69b4';
-        ctx.font = '16px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Барби', 150, 400);
-        
-        return canvas.toDataURL();
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = 300;
+            canvas.height = 500;
+            const ctx = canvas.getContext('2d');
+            
+            // Фон
+            ctx.fillStyle = '#ffe6f2';
+            ctx.fillRect(0, 0, 300, 500);
+            
+            // Силуэт куклы
+            ctx.fillStyle = '#ffb6c1';
+            
+            // Голова
+            ctx.beginPath();
+            ctx.arc(150, 100, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Тело
+            ctx.beginPath();
+            ctx.moveTo(130, 140);
+            ctx.lineTo(130, 250);
+            ctx.lineTo(170, 250);
+            ctx.lineTo(170, 140);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Ноги
+            ctx.beginPath();
+            ctx.moveTo(130, 250);
+            ctx.lineTo(120, 350);
+            ctx.lineTo(140, 350);
+            ctx.lineTo(150, 250);
+            
+            ctx.moveTo(170, 250);
+            ctx.lineTo(160, 350);
+            ctx.lineTo(180, 350);
+            ctx.lineTo(190, 250);
+            ctx.fill();
+            
+            // Волосы
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(150, 80, 50, Math.PI, Math.PI * 2);
+            ctx.fill();
+            
+            // Глаза
+            ctx.fillStyle = '#00aaff';
+            ctx.beginPath();
+            ctx.arc(135, 95, 8, 0, Math.PI * 2);
+            ctx.arc(165, 95, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Улыбка
+            ctx.strokeStyle = '#ff69b4';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(150, 115, 15, 0.2, Math.PI - 0.2);
+            ctx.stroke();
+            
+            // Текст
+            ctx.fillStyle = '#ff69b4';
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Барби', 150, 400);
+            
+            return canvas.toDataURL();
+        } catch (error) {
+            console.error('Ошибка создания силуэта куклы:', error);
+            return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="500"><rect width="300" height="500" fill="%23ffe6f2"/><text x="150" y="250" font-family="Arial" font-size="20" text-anchor="middle" fill="%23ff69b4">Барби</text></svg>';
+        }
     }
 
     getWardrobeConfig() {
@@ -239,16 +268,95 @@ class AssetLoader {
     }
 
     getDoll(dollId) {
-        return this.assets.dolls[dollId] || this.assets.dolls['barbie-base'];
+        return this.assets.dolls[dollId] || this.assets.dolls['barbie-base'] || null;
     }
 
     getClothing(itemId, category) {
-        return this.assets.clothes[itemId];
+        return this.assets.clothes[itemId] || null;
     }
 
     getAllClothesByCategory(category) {
-        if (!this.assets.wardrobeConfig?.categories?.[category]) return [];
+        if (!this.assets.wardrobeConfig?.categories?.[category]) {
+            return [];
+        }
         return this.assets.wardrobeConfig.categories[category];
+    }
+
+    // Новый метод: проверка загрузки изображений
+    async preloadImages() {
+        const imagesToPreload = [];
+        
+        // Презагрузка кукол
+        Object.values(this.assets.dolls).forEach(doll => {
+            if (doll.image) {
+                imagesToPreload.push(this.preloadImage(doll.image));
+            }
+        });
+        
+        // Презагрузка одежды
+        Object.values(this.assets.clothes).forEach(clothing => {
+            if (clothing.image) {
+                imagesToPreload.push(this.preloadImage(clothing.image));
+            }
+            if (clothing.thumbnail) {
+                imagesToPreload.push(this.preloadImage(clothing.thumbnail));
+            }
+        });
+        
+        try {
+            await Promise.all(imagesToPreload);
+            console.log('✅ Все изображения презагружены');
+        } catch (error) {
+            console.warn('⚠️ Некоторые изображения не загрузились:', error);
+        }
+    }
+
+    preloadImage(src) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = () => reject(new Error(`Не удалось загрузить: ${src}`));
+            img.src = src;
+        });
+    }
+
+    // Метод для проверки существования файлов
+    async validateAssets() {
+        const missingFiles = [];
+        
+        // Проверка кукол
+        for (const doll of Object.values(this.assets.dolls)) {
+            if (doll.image && !await this.fileExists(doll.image)) {
+                missingFiles.push(doll.image);
+            }
+        }
+        
+        // Проверка одежды
+        for (const clothing of Object.values(this.assets.clothes)) {
+            if (clothing.image && !await this.fileExists(clothing.image)) {
+                missingFiles.push(clothing.image);
+            }
+            if (clothing.thumbnail && !await this.fileExists(clothing.thumbnail)) {
+                missingFiles.push(clothing.thumbnail);
+            }
+        }
+        
+        if (missingFiles.length > 0) {
+            console.warn('⚠️ Отсутствующие файлы:', missingFiles);
+            return false;
+        }
+        
+        console.log('✅ Все файлы на месте');
+        return true;
+    }
+
+    async fileExists(url) {
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            return response.ok;
+        } catch (error) {
+            return false;
+        }
     }
 }
 
