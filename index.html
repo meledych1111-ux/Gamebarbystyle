@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barbie Dress Up Game</title>
     <style>
+    /* Barbie Dress Up Game Styles - Optimized for Mobile */
     * {
         margin: 0;
         padding: 0;
@@ -35,6 +36,7 @@
         justify-content: center;
         align-items: center;
         font-size: 16px;
+        /* Отключаем ненужные анимации для телефона */
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
     }
@@ -47,6 +49,7 @@
         padding: 20px;
         box-shadow: var(--shadow);
         border: 2px solid var(--light-pink);
+        /* Улучшаем производительность */
         transform: translateZ(0);
         will-change: transform;
     }
@@ -60,7 +63,7 @@
 
     .game-header h1 {
         color: var(--dark-pink);
-        font-size: 2.5rem;
+        font-size: 2.5rem !important;
         font-weight: 700;
         background: linear-gradient(45deg, var(--dark-pink), var(--primary-pink), var(--purple));
         -webkit-background-clip: text;
@@ -88,29 +91,33 @@
         height: fit-content;
     }
 
+    /* Оптимизированное окно Барби */
     .canvas-container {
         position: relative;
-        background: linear-gradient(135deg, #f6ffcd 0%, #fff0e1 100%);
+        background: linear-gradient(135deg, #ff9ecb 0%, #ff85b3 25%, #ff6b9e 50%, #ff4d8d 75%, #e91e63 100%);
         border-radius: 20px;
-        padding: 15px;
+        padding: 20px;
         box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
         border: 2px solid var(--white);
         width: 100%;
-        height: 600px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        /* Улучшаем производительность */
         transform: translateZ(0);
         will-change: transform;
     }
 
+    /* УБИРАЕМ ресурсоемкие анимации блеска */
+    /* .canvas-container::before {
+        display: none;
+    } */
+
     #dollCanvas {
         width: 100%;
-        height: 100%;
+        height: 550px;
         border-radius: 15px;
         background: var(--white);
         display: block;
         border: 1px solid rgba(255, 255, 255, 0.3);
+        /* Улучшаем производительность рендеринга */
         image-rendering: -webkit-optimize-contrast;
         image-rendering: crisp-edges;
         transform: translateZ(0);
@@ -146,7 +153,13 @@
         transition: var(--transition);
         box-shadow: var(--shadow);
         min-width: 110px;
+        /* Убираем сложные анимации */
         transform: translateZ(0);
+    }
+
+    /* УБИРАЕМ ресурсоемкие hover-эффекты для мобильных */
+    .tab-button::before {
+        display: none;
     }
 
     .tab-button:hover {
@@ -160,6 +173,7 @@
         box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
     }
 
+    /* Оптимизированная сетка одежды */
     .clothes-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -171,6 +185,7 @@
         border-radius: 12px;
         scrollbar-width: thin;
         scrollbar-color: var(--primary-pink) var(--light-gray);
+        /* Улучшаем скроллинг */
         -webkit-overflow-scrolling: touch;
         transform: translateZ(0);
     }
@@ -194,35 +209,19 @@
         transform: translateZ(0);
     }
 
+    /* УБИРАЕМ сложные анимации блеска */
+    .clothing-item::before,
+    .clothing-item::after {
+        display: none;
+    }
+
     .clothing-item:hover {
         transform: translateY(-3px);
         border-color: var(--primary-pink);
         box-shadow: var(--shadow-hover);
     }
 
-    .clothing-item.active {
-        border-color: var(--dark-pink);
-        background: var(--light-pink);
-        box-shadow: 0 0 15px rgba(233, 30, 99, 0.3);
-    }
-
-    .clothing-item.active::after {
-        content: '✓';
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 24px;
-        height: 24px;
-        background: var(--dark-pink);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 14px;
-    }
-
+    /* Оптимизированные изображения */
     .clothing-item img {
         width: 100%;
         height: 140px;
@@ -230,6 +229,7 @@
         margin-bottom: 10px;
         transition: var(--transition);
         border: none;
+        /* Улучшаем производительность */
         image-rendering: -webkit-optimize-contrast;
         transform: translateZ(0);
     }
@@ -256,11 +256,6 @@
         color: white;
     }
 
-    .clothing-item.active p {
-        background: var(--dark-pink);
-        color: white;
-    }
-
     .controls {
         display: flex;
         justify-content: center;
@@ -279,6 +274,11 @@
         box-shadow: var(--shadow);
         min-width: 160px;
         transform: translateZ(0);
+    }
+
+    /* УБИРАЕМ сложные анимации */
+    .controls button::before {
+        display: none;
     }
 
     .controls button:hover {
@@ -303,6 +303,7 @@
         box-shadow: 0 8px 20px rgba(46, 213, 115, 0.25);
     }
 
+    /* УПРОЩАЕМ анимации */
     @keyframes fadeIn {
         from {
             opacity: 0;
@@ -314,19 +315,22 @@
         }
     }
 
+    /* УБИРАЕМ ненужные анимации */
+    /* @keyframes pulse, shine, sparkle - удаляем */
+
     .game-container {
         animation: fadeIn 0.5s ease-out;
     }
 
-    /* Адаптивность */
+    /* Адаптивность с оптимизацией */
     @media (max-width: 1200px) {
         .game-main {
             grid-template-columns: 320px 1fr;
             gap: 20px;
         }
         
-        .canvas-container {
-            height: 520px;
+        #dollCanvas {
+            height: 480px;
         }
         
         .clothes-grid {
@@ -348,13 +352,17 @@
         .canvas-container {
             max-width: 350px;
             margin: 0 auto;
-            height: 480px;
+        }
+        
+        #dollCanvas {
+            height: 450px;
         }
         
         .clothes-grid {
             max-height: 400px;
         }
         
+        /* На мобильных отключаем некоторые hover-эффекты */
         .clothing-item:hover {
             transform: none;
         }
@@ -379,7 +387,7 @@
         }
         
         .game-header h1 {
-            font-size: 2rem;
+            font-size: 2rem !important;
         }
         
         .tab-button {
@@ -420,13 +428,17 @@
         .canvas-container {
             padding: 15px;
             border-radius: 15px;
-            height: 420px;
+        }
+        
+        #dollCanvas {
+            height: 380px;
+            border-radius: 12px;
         }
     }
 
     @media (max-width: 480px) {
         .game-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.8rem !important;
         }
         
         .tab-button {
@@ -460,14 +472,8 @@
             max-width: 250px;
         }
         
-        .canvas-container {
-            height: 360px;
-        }
-        
-        .clothing-item.active::after {
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+        #dollCanvas {
+            height: 320px;
         }
     }
 
@@ -484,11 +490,12 @@
             height: 90px;
         }
         
-        .canvas-container {
-            height: 320px;
+        #dollCanvas {
+            height: 280px;
         }
     }
 
+    /* Отключаем анимации для пользователей, которые предпочитают reduced motion */
     @media (prefers-reduced-motion: reduce) {
         * {
             animation-duration: 0.01ms !important;
@@ -497,18 +504,23 @@
         }
     }
 
-    .performance-warning {
-        display: none;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #ff4757;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 8px;
-        font-size: 14px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
+    /* Улучшаем производительность скролла */
+    .clothes-grid {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* Оптимизация для touch-устройств */
+    @media (hover: none) {
+        .tab-button:hover,
+        .clothing-item:hover,
+        .controls button:hover {
+            transform: none !important;
+        }
+        
+        .clothing-item:hover img {
+            transform: none !important;
+        }
     }
     </style>
 </head>
@@ -541,262 +553,48 @@
         </main>
 
         <div class="controls">
-            <button id="resetBtn">Сбросить всё</button>
+            <button id="resetBtn">Сбросить</button>
             <button id="saveBtn">Сохранить</button>
         </div>
     </div>
 
-    <div class="performance-warning" id="perfWarning">
-        Высокое потребление ресурсов. Закройте другие вкладки для лучшей производительности.
-    </div>
+    <script src="js/asset-loader.js"></script>
+    <script src="js/wardrobe-manager.js"></script>
+    <script src="js/canvas-renderer.js"></script>
+    <script src="js/color-picker.js"></script>
+    <script src="js/game.js"></script>
 
     <script>
+    // Дополнительная оптимизация для телефонов
     document.addEventListener('DOMContentLoaded', function() {
-        // Мониторинг производительности
-        let perfWarning = document.getElementById('perfWarning');
-        let lastUpdate = Date.now();
-        let frameCount = 0;
-        
-        // Функция для мониторинга FPS
-        function monitorPerformance() {
-            frameCount++;
-            let now = Date.now();
-            let elapsed = now - lastUpdate;
-            
-            if (elapsed >= 1000) {
-                let fps = Math.round((frameCount * 1000) / elapsed);
-                
-                if (fps < 25) {
-                    perfWarning.style.display = 'block';
-                } else {
-                    perfWarning.style.display = 'none';
-                }
-                
-                frameCount = 0;
-                lastUpdate = now;
-            }
-            
-            requestAnimationFrame(monitorPerformance);
-        }
-        
-        monitorPerformance();
-        
-        // Оптимизация для мобильных устройств
+        // Отключаем ненужные функции на мобильных
         if ('ontouchstart' in window) {
+            // Оптимизация для touch-устройств
             const canvas = document.getElementById('dollCanvas');
             if (canvas) {
                 canvas.style.imageRendering = 'pixelated';
             }
-        }
-        
-        // Текущее состояние одежды
-        const currentOutfit = {
-            dresses: null,
-            tops: null,
-            pants: null,
-            shoes: null,
-            accessories: null
-        };
-        
-        const categories = ['dresses', 'tops', 'pants', 'shoes', 'accessories'];
-        const clothesGrid = document.getElementById('clothesGrid');
-        
-        // Генерация элементов одежды
-        function generateClothingItems(category) {
-            clothesGrid.innerHTML = '';
             
-            for (let i = 1; i <= 8; i++) {
-                const item = document.createElement('div');
-                item.className = 'clothing-item';
-                item.dataset.category = category;
-                item.dataset.id = i;
-                
-                // Проверяем, надета ли эта вещь
-                if (currentOutfit[category] === i) {
-                    item.classList.add('active');
-                }
-                
-                const img = document.createElement('img');
-                img.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150"><rect width="150" height="150" fill="%23ffd6e0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="14" fill="%23e91e63">${category} ${i}</text></svg>`;
-                img.alt = `${category} ${i}`;
-                
-                const p = document.createElement('p');
-                p.textContent = `${category.charAt(0).toUpperCase() + category.slice(1)} ${i}`;
-                
-                item.appendChild(img);
-                item.appendChild(p);
-                
-                // Обработчик клика для одежды
-                item.addEventListener('click', function() {
-                    const itemCategory = this.dataset.category;
-                    const itemId = parseInt(this.dataset.id);
-                    
-                    // Если эта вещь уже надета - снимаем ее
-                    if (currentOutfit[itemCategory] === itemId) {
-                        currentOutfit[itemCategory] = null;
-                        this.classList.remove('active');
-                    } else {
-                        // Снимаем предыдущую вещь этой категории
-                        document.querySelectorAll(`.clothing-item[data-category="${itemCategory}"]`).forEach(el => {
-                            el.classList.remove('active');
-                        });
-                        
-                        // Надеваем новую вещь
-                        currentOutfit[itemCategory] = itemId;
-                        this.classList.add('active');
-                    }
-                    
-                    updateDollAppearance();
-                });
-                
-                clothesGrid.appendChild(item);
+            // Уменьшаем частоту обновления на мобильных
+            if (typeof window.optimizeMobile !== 'undefined') {
+                window.optimizeMobile();
             }
         }
         
-        // Обновление внешнего вида куклы
-        function updateDollAppearance() {
-            const canvas = document.getElementById('dollCanvas');
-            if (canvas.getContext) {
-                const ctx = canvas.getContext('2d');
-                
-                // Очищаем canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Рисуем базовую куклу
-                drawBaseDoll(ctx);
-                
-                // Рисуем одежду поверх куклы
-                for (const category in currentOutfit) {
-                    if (currentOutfit[category]) {
-                        drawClothingItem(ctx, category, currentOutfit[category]);
-                    }
-                }
-            }
-        }
-        
-        // Рисование базовой куклы
-        function drawBaseDoll(ctx) {
-            // Тело
-            ctx.fillStyle = '#ffc0cb';
-            ctx.beginPath();
-            ctx.arc(175, 150, 50, 0, Math.PI * 2); // голова
-            ctx.fill();
+        // Предзагрузка критических ресурсов
+        function preloadCriticalAssets() {
+            const criticalImages = [
+                'assets/dolls/barbie-base.png',
+                'assets/clothes/dresses/dress-pink.png'
+            ];
             
-            // шея
-            ctx.fillRect(165, 200, 20, 20);
-            
-            // тело
-            ctx.fillStyle = '#ff9ecb';
-            ctx.fillRect(150, 220, 50, 100);
-            
-            // ноги
-            ctx.fillRect(140, 320, 20, 100);
-            ctx.fillRect(190, 320, 20, 100);
-            
-            // руки
-            ctx.fillRect(120, 220, 30, 80);
-            ctx.fillRect(200, 220, 30, 80);
-            
-            // глаза
-            ctx.fillStyle = '#000';
-            ctx.beginPath();
-            ctx.arc(160, 140, 5, 0, Math.PI * 2);
-            ctx.arc(190, 140, 5, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // улыбка
-            ctx.beginPath();
-            ctx.arc(175, 170, 15, 0, Math.PI);
-            ctx.stroke();
-            
-            // волосы
-            ctx.fillStyle = '#ffd700';
-            ctx.beginPath();
-            ctx.arc(175, 150, 60, Math.PI * 0.8, Math.PI * 2.2);
-            ctx.fill();
-        }
-        
-        // Рисование элемента одежды
-        function drawClothingItem(ctx, category, itemId) {
-            ctx.fillStyle = getColorForItem(category, itemId);
-            
-            switch(category) {
-                case 'dresses':
-                    // Платье
-                    ctx.fillRect(140, 220, 70, 120);
-                    break;
-                    
-                case 'tops':
-                    // Верх
-                    ctx.fillRect(140, 220, 70, 60);
-                    break;
-                    
-                case 'pants':
-                    // Низ
-                    ctx.fillRect(140, 280, 70, 60);
-                    ctx.fillRect(140, 320, 20, 80);
-                    ctx.fillRect(190, 320, 20, 80);
-                    break;
-                    
-                case 'shoes':
-                    // Обувь
-                    ctx.fillRect(135, 400, 30, 20);
-                    ctx.fillRect(185, 400, 30, 20);
-                    break;
-                    
-                case 'accessories':
-                    // Аксессуары (например, сумочка)
-                    ctx.fillRect(220, 280, 40, 60);
-                    break;
-            }
-        }
-        
-        // Получение цвета для элемента одежды
-        function getColorForItem(category, itemId) {
-            const colors = {
-                'dresses': ['#ff4d8d', '#ff85a2', '#d16bff', '#ff6b81'],
-                'tops': ['#ff4757', '#ff9ff0', '#7bed9f', '#70a1ff'],
-                'pants': ['#2ed573', '#ffa502', '#ff6b81', '#5352ed'],
-                'shoes': ['#2f3542', '#ff4757', '#3742fa', '#ffa502'],
-                'accessories': ['#ffd700', '#ff6b81', '#5352ed', '#2ed573']
-            };
-            
-            return colors[category][(itemId - 1) % colors[category].length];
-        }
-        
-        // Обработчики для вкладок
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                generateClothingItems(this.dataset.category);
+            criticalImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
             });
-        });
+        }
         
-        // Обработчики для кнопок управления
-        document.getElementById('resetBtn').addEventListener('click', function() {
-            // Сбрасываем всю одежду
-            for (const category in currentOutfit) {
-                currentOutfit[category] = null;
-            }
-            
-            // Обновляем внешний вид
-            updateDollAppearance();
-            
-            // Перезагружаем текущую категорию
-            const activeCategory = document.querySelector('.tab-button.active').dataset.category;
-            generateClothingItems(activeCategory);
-            
-            alert('Все элементы одежды сняты!');
-        });
-        
-        document.getElementById('saveBtn').addEventListener('click', function() {
-            alert('Образ сохранен!');
-        });
-        
-        // Инициализация
-        generateClothingItems('dresses');
-        updateDollAppearance();
+        preloadCriticalAssets();
     });
     </script>
 </body>
