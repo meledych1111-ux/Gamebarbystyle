@@ -26,7 +26,23 @@
         --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.15);
         --transition: all 0.2s ease;
     }
+    /* Стили для выделения выбранной одежды */
+    .clothing-item.selected {
+        border: 3px solid var(--primary-pink) !important;
+        box-shadow: 0 0 15px rgba(255, 77, 141, 0.4) !important;
+        transform: scale(1.05);
+    }
 
+    .clothing-item {
+        transition: var(--transition);
+        border: 2px solid transparent;
+        cursor: pointer;
+    }
+
+    .clothing-item:hover {
+        transform: scale(1.03);
+        border-color: var(--secondary-pink);
+    }
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #ffc0cb 0%, #ff9ecb 25%, #ff85b3 50%, #d16bff 75%, #b84dff 100%);
