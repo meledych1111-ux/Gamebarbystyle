@@ -79,7 +79,7 @@ class BarbieDressUpGame {
                     this.createSparkleEffect(e);
                     const itemId = clothingItem.dataset.itemId;
                     const category = clothingItem.dataset.category;
-                    this.selectClothing(itemId, category);
+                    this.toggleClothing(itemId, category);
                 }
             });
         }
@@ -108,12 +108,48 @@ class BarbieDressUpGame {
         }
     }
 
+    toggleClothing(itemId, category) {
+        if (assetLoader && assetLoader.getClothing) {
+            const clothing = assetLoader.getClothing(itemId, category);
+            
+            if (!clothing) return;
+            
+            // Если нажали на уже выбранный предмет - снимаем его
+            if (this.currentClothes[category] && this.currentClothes[category].id === itemId) {
+                this.currentClothes[category] = null;
+            } else {
+                // Иначе надеваем новый предмет (старый автоматически снимается)
+                this.currentClothes[category] = clothing;
+            }
+            
+            this.render();
+            this.updateClothingSelectionUI(itemId, category);
+        }
+    }
+
+    // Обновление визуального выделения выбранной одежды
+    updateClothingSelectionUI(itemId, category) {
+        // Убираем выделение со всех предметов в этой категории
+        document.querySelectorAll(`.clothing-item[data-category="${category}"]`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Добавляем выделение текущему предмету, если он выбран
+        if (this.currentClothes[category] && this.currentClothes[category].id === itemId) {
+            const selectedItem = document.querySelector(`.clothing-item[data-item-id="${itemId}"][data-category="${category}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+        }
+    }
+
     selectClothing(itemId, category) {
         if (assetLoader && assetLoader.getClothing) {
             const clothing = assetLoader.getClothing(itemId, category);
             if (clothing) {
                 this.currentClothes[category] = clothing;
                 this.render();
+                this.updateClothingSelectionUI(itemId, category);
             }
         }
     }
@@ -138,6 +174,11 @@ class BarbieDressUpGame {
             shoes: null,
             accessories: null
         };
+        
+        // Снимаем выделение со всей одежды
+        document.querySelectorAll('.clothing-item').forEach(item => {
+            item.classList.remove('selected');
+        });
         
         this.render();
     }
