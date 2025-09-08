@@ -101,10 +101,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 20px;
+        gap: 15px; /* Уменьшаем промежуток */
         position: sticky;
         top: 15px;
         height: fit-content;
+        min-height: 650px; /* Добавляем минимальную высоту */
     }
 
     /* Оптимизированное окно Барби */
@@ -112,23 +113,19 @@
         position: relative;
         background: linear-gradient(135deg, #ff9ecb 0%, #ff85b3 25%, #ff6b9e 50%, #ff4d8d 75%, #e91e63 100%);
         border-radius: 20px;
-        padding: 20px;
+        padding: 15px; /* Уменьшаем отступы */
         box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
         border: 2px solid var(--white);
         width: 100%;
+        height: 600px; /* УВЕЛИЧИВАЕМ ВЫСОТУ */
         /* Улучшаем производительность */
         transform: translateZ(0);
         will-change: transform;
     }
 
-    /* УБИРАЕМ ресурсоемкие анимации блеска */
-    /* .canvas-container::before {
-        display: none;
-    } */
-
     #dollCanvas {
-        width: 100%;
-        height: 550px;
+        width: 100%; /* ИСПРАВЛЕНО: было 350% */
+        height: 570px; /* УВЕЛИЧИВАЕМ ВЫСОТУ */
         border-radius: 15px;
         background: var(--white);
         display: block;
@@ -331,9 +328,6 @@
         }
     }
 
-    /* УБИРАЕМ ненужные анимации */
-    /* @keyframes pulse, shine, sparkle - удаляем */
-
     .game-container {
         animation: fadeIn 0.5s ease-out;
     }
@@ -346,7 +340,7 @@
         }
         
         #dollCanvas {
-            height: 480px;
+            height: 520px;
         }
         
         .clothes-grid {
@@ -366,19 +360,19 @@
         }
         
         .canvas-container {
-            max-width: 350px;
+            max-width: 400px;
             margin: 0 auto;
+            height: 550px;
         }
         
         #dollCanvas {
-            height: 450px;
+            height: 520px;
         }
         
         .clothes-grid {
             max-height: 400px;
         }
         
-        /* На мобильных отключаем некоторые hover-эффекты */
         .clothing-item:hover {
             transform: none;
         }
@@ -444,10 +438,12 @@
         .canvas-container {
             padding: 15px;
             border-radius: 15px;
+            height: 500px;
+            max-width: 350px;
         }
         
         #dollCanvas {
-            height: 380px;
+            height: 470px;
             border-radius: 12px;
         }
     }
@@ -488,8 +484,13 @@
             max-width: 250px;
         }
         
+        .canvas-container {
+            height: 450px;
+            max-width: 320px;
+        }
+        
         #dollCanvas {
-            height: 320px;
+            height: 425px;
         }
     }
 
@@ -506,8 +507,13 @@
             height: 90px;
         }
         
+        .canvas-container {
+            height: 400px;
+            max-width: 280px;
+        }
+        
         #dollCanvas {
-            height: 280px;
+            height: 375px;
         }
     }
 
@@ -549,7 +555,7 @@
         <main class="game-main">
             <div class="doll-section">
                 <div class="canvas-container">
-                    <canvas id="dollCanvas" width="350" height="550"></canvas>
+                    <canvas id="dollCanvas" width="350" height="570"></canvas> <!-- ИСПРАВЛЕНО: height="570" -->
                 </div>
             </div>
 
@@ -583,21 +589,17 @@
     <script>
     // Дополнительная оптимизация для телефонов
     document.addEventListener('DOMContentLoaded', function() {
-        // Отключаем ненужные функции на мобильных
         if ('ontouchstart' in window) {
-            // Оптимизация для touch-устройств
             const canvas = document.getElementById('dollCanvas');
             if (canvas) {
                 canvas.style.imageRendering = 'pixelated';
             }
             
-            // Уменьшаем частоту обновления на мобильных
             if (typeof window.optimizeMobile !== 'undefined') {
                 window.optimizeMobile();
             }
         }
         
-        // Предзагрузка критических ресурсов
         function preloadCriticalAssets() {
             const criticalImages = [
                 'assets/dolls/barbie-base.png',
