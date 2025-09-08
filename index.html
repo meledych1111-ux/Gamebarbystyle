@@ -91,28 +91,28 @@
         height: fit-content;
     }
 
-    /* Оптимизированное окно Барби */
+    /* Измененное окно Барби - более вытянутое с новым градиентом */
     .canvas-container {
         position: relative;
-        background: linear-gradient(135deg, #ff9ecb 0%, #ff85b3 25%, #ff6b9e 50%, #ff4d8d 75%, #e91e63 100%);
+        background: linear-gradient(135deg, #f6ffcd 0%, #fff0e1 100%);
         border-radius: 20px;
-        padding: 20px;
+        padding: 15px;
         box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);
         border: 2px solid var(--white);
         width: 100%;
         /* Улучшаем производительность */
         transform: translateZ(0);
         will-change: transform;
+        /* Делаем контейнер более вытянутым */
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-
-    /* УБИРАЕМ ресурсоемкие анимации блеска */
-    /* .canvas-container::before {
-        display: none;
-    } */
 
     #dollCanvas {
         width: 100%;
-        height: 550px;
+        height: 100%;
         border-radius: 15px;
         background: var(--white);
         display: block;
@@ -155,11 +155,6 @@
         min-width: 110px;
         /* Убираем сложные анимации */
         transform: translateZ(0);
-    }
-
-    /* УБИРАЕМ ресурсоемкие hover-эффекты для мобильных */
-    .tab-button::before {
-        display: none;
     }
 
     .tab-button:hover {
@@ -207,12 +202,6 @@
         min-height: 220px;
         justify-content: space-between;
         transform: translateZ(0);
-    }
-
-    /* УБИРАЕМ сложные анимации блеска */
-    .clothing-item::before,
-    .clothing-item::after {
-        display: none;
     }
 
     .clothing-item:hover {
@@ -276,11 +265,6 @@
         transform: translateZ(0);
     }
 
-    /* УБИРАЕМ сложные анимации */
-    .controls button::before {
-        display: none;
-    }
-
     .controls button:hover {
         transform: translateY(-2px);
     }
@@ -315,9 +299,6 @@
         }
     }
 
-    /* УБИРАЕМ ненужные анимации */
-    /* @keyframes pulse, shine, sparkle - удаляем */
-
     .game-container {
         animation: fadeIn 0.5s ease-out;
     }
@@ -329,8 +310,8 @@
             gap: 20px;
         }
         
-        #dollCanvas {
-            height: 480px;
+        .canvas-container {
+            height: 520px;
         }
         
         .clothes-grid {
@@ -352,10 +333,7 @@
         .canvas-container {
             max-width: 350px;
             margin: 0 auto;
-        }
-        
-        #dollCanvas {
-            height: 450px;
+            height: 480px;
         }
         
         .clothes-grid {
@@ -428,11 +406,7 @@
         .canvas-container {
             padding: 15px;
             border-radius: 15px;
-        }
-        
-        #dollCanvas {
-            height: 380px;
-            border-radius: 12px;
+            height: 420px;
         }
     }
 
@@ -472,8 +446,8 @@
             max-width: 250px;
         }
         
-        #dollCanvas {
-            height: 320px;
+        .canvas-container {
+            height: 360px;
         }
     }
 
@@ -490,8 +464,8 @@
             height: 90px;
         }
         
-        #dollCanvas {
-            height: 280px;
+        .canvas-container {
+            height: 320px;
         }
     }
 
