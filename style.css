@@ -119,13 +119,12 @@ body {
     width: 100%;
     height: 570px;
     border-radius: 15px;
-    /*  вариант с диагональным узором */
+    /* Светло-серый градиент с легким узором */
     background: 
-        linear-gradient(to bottom, #fafafa, #f5f5f5),
-        linear-gradient(45deg, #e8e8e8 25%, transparent 25%, transparent 75%, #e8e8e8 75%),
-        linear-gradient(-45deg, #e8e8e8 25%, transparent 25%, transparent 75%, #e8e8e8 75%);
-    background-size: 100% 100%, 20px 20px, 20px 20px;
-    background-blend-mode: soft-light;
+        linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 50%, #f8f8f8 100%),
+        repeating-linear-gradient(45deg, rgba(230,230,230,0.5) 0px, rgba(230,230,230,0.5) 1px, 
+                                 transparent 1px, transparent 8px);
+    background-blend-mode: overlay;
     display: block;
     border: 1px solid rgba(255, 255, 255, 0.3);
     image-rendering: -webkit-optimize-contrast;
