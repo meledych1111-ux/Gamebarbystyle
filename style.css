@@ -119,14 +119,12 @@ body {
     width: 100%;
     height: 570px;
     border-radius: 15px;
-    /* Серый с легким синеватым подтоном */
     background: 
         linear-gradient(135deg, #e0e0e8 0%, #d8d8e0 25%, #d0d0d8 50%, #d8d8e0 75%, #e0e0e8 100%),
         repeating-linear-gradient(45deg, rgba(180, 180, 190, 0.3) 0px, rgba(180, 180, 190, 0.3) 1px, 
                                  transparent 1px, transparent 10px);
     background-blend-mode: overlay;
     display: block;
-    border: 2px solid rgba(150, 150, 160, 0.6);
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     transform: translateZ(0);
